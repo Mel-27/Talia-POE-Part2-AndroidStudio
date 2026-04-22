@@ -1,985 +1,400 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Main Content with Bottom Navigation -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/light_background">
-
-        <!-- Top App Bar with playful design -->
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/warning_yellow"
-            app:navigationIcon="@drawable/ic_menu"
-            app:title="Budget Bee"
-            app:titleTextColor="@color/white"
-            app:titleCentered="true"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
-
-        <!-- Content Area - This will scroll -->
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
-
-                <!-- Welcome Header with playful animation -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/welcome_background"
-                    android:padding="12dp"
-                    android:elevation="2dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🐝 Welcome back, busy bee!"
-                            android:textSize="14sp"
-                            android:textColor="@color/primary_text"
-                            android:letterSpacing="0.02"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="John Doe 👋"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_text"
-                            android:fontFamily="sans-serif-black"/>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/cream">
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:scrollbars="none" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <!-- ── Cream Top Bar — Logo + App Name ────────── -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:background="@color/cream" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="18dp" android:paddingEnd="18dp">
+                <ImageView android:layout_width="36dp" android:layout_height="36dp" android:src="@drawable/budgetbee" android:scaleType="fitCenter" android:contentDescription="Budget Bee Logo"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:text="Budget Bee" android:textColor="@color/black_deep" android:textSize="22sp" android:fontFamily="@font/fredoka_one"/>
+            </LinearLayout>
+            <!-- ── Dark Header ─────────────────────────────── -->
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/dashboard_header_bg" android:paddingStart="22dp" android:paddingEnd="22dp" android:paddingTop="20dp" android:paddingBottom="22dp">
+                <LinearLayout android:id="@+id/greetingRow" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="20dp">
+                    <!-- Greeting text -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good morning," android:textColor="#99FFF9EC" android:textSize="13sp" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:id="@+id/tvUserName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gia 🐝" android:textColor="@color/cream" android:textSize="22sp" android:fontFamily="@font/fredoka_one"/>
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@mipmap/ic_launcher_foreground_bee"
-                        android:background="@color/light_yellow"
-                        android:padding="8dp"
-                        android:contentDescription="Profile"
-                        android:elevation="4dp"
-                        android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/roundImageView"/>
-                </LinearLayout>
-
-                <!-- Budget Summary Card with animated progress and playful elements -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="8dp"
-                    android:layout_marginBottom="20dp"
-                    android:backgroundTint="@color/warning_yellow"
-                    android:stateListAnimator="@animator/card_elevation">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/budget_card_pattern"
-                        android:orientation="vertical"
-                        android:padding="24dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="space_between"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:alpha="0.9"
-                                android:fontFamily="sans-serif-medium"
-                                android:text="📅 February 2024"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:alpha="0.9"
-                                android:fontFamily="sans-serif-medium"
-                                android:text="💰 Budget"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="space_between"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-black"
-                                android:shadowColor="#33000000"
-                                android:shadowDx="2"
-                                android:shadowDy="2"
-                                android:shadowRadius="4"
-                                android:text="R5,000.00"
-                                android:textColor="@color/white"
-                                android:textSize="36sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:alpha="0.8"
-                                android:text="R8,000"
-                                android:textColor="@color/white"
-                                android:textSize="20sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="12dp"
-                            android:alpha="0.9"
-                            android:background="@color/white_alpha_20"
-                            android:gravity="center"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:text="63% used • R3,000 left to spend"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            app:shapeAppearanceOverlay="@style/roundedChip" />
-
-                        <ProgressBar
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="12dp"
-                            android:animationResolution="10"
-                            android:indeterminate="false"
-                            android:indeterminateOnly="false"
-                            android:progress="63"
-                            android:progressBackgroundTint="@color/white_alpha_30"
-                            android:progressBackgroundTintMode="src_over"
-                            android:progressTint="@color/white" />
-
-                        <!-- Animated bee indicator -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="4dp"
-                                android:animateLayoutChanges="true"
-                                android:rotation="10"
-                                android:src="@drawable/ic_bee"
-                                android:translationY="-2dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/white_alpha_20"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                android:text="On track! 🎯"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                app:shapeAppearanceOverlay="@style/roundedChip" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Spending Graph Section with playful header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="space_between"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📊 Weekly Spending Trend"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_text"
-                        android:fontFamily="sans-serif-black"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="View Details →"
-                        android:textSize="12sp"
-                        android:textColor="@color/warning_yellow"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_button_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    android:layout_marginBottom="20dp"
-                    android:backgroundTint="@color/card_background"
-                    android:stateListAnimator="@animator/card_elevation">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- Fun bar chart with animations and colors -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:orientation="horizontal"
-                            android:gravity="bottom|center_horizontal"
-                            android:weightSum="7"
-                            android:layout_marginBottom="8dp">
-
-                            <!-- Mon - with animation -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="40dp"
-                                    android:background="@drawable/graph_bar_gradient_1"
-                                    android:layout_gravity="center_horizontal"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Mon"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Tue -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="65dp"
-                                    android:background="@drawable/graph_bar_gradient_2"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Tue"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Wed -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="55dp"
-                                    android:background="@drawable/graph_bar_gradient_3"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Wed"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Thu (highlight) -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="80dp"
-                                    android:background="@drawable/graph_bar_gradient_highlight"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Thu"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/warning_yellow"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Fri -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="70dp"
-                                    android:background="@drawable/graph_bar_gradient_4"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Fri"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Sat -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="90dp"
-                                    android:background="@drawable/graph_bar_gradient_5"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Sat"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <!-- Sun -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal">
-                                <View
-                                    android:layout_width="24dp"
-                                    android:layout_height="45dp"
-                                    android:background="@drawable/graph_bar_gradient_1"/>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Sun"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/secondary_text"
-                                    android:layout_marginTop="4dp"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <!-- Spending insight -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔥 You spent the most on Thursday!"
-                            android:textSize="12sp"
-                            android:textColor="@color/warning_yellow"
-                            android:textStyle="bold"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@color/light_yellow"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            app:shapeAppearanceOverlay="@style/roundedChip"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Top Categories with playful header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="space_between"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💰 Top Spending Categories"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_text"
-                        android:fontFamily="sans-serif-black"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="See All →"
-                        android:textSize="12sp"
-                        android:textColor="@color/warning_yellow"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_button_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    android:layout_marginBottom="20dp"
-                    android:stateListAnimator="@animator/card_elevation">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp"
-                        android:background="@drawable/category_background">
-
-                        <!-- Groceries - with fun animation -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="20dp"
-                            android:background="@drawable/category_item_bg"
-                            android:padding="8dp">
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/ic_groceries"
-                                android:background="@color/light_red"
-                                android:backgroundTint="#20E74C3C"
-                                android:padding="10dp"
-                                android:tint="@color/error_red"/>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginStart="12dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Groceries"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/primary_text"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="⚠️ R2,500 of R2,000"
-                                    android:textSize="13sp"
-                                    android:textColor="@color/error_red"
-                                    android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="+R500"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/error_red"
-                                android:background="@color/light_red"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                app:shapeAppearanceOverlay="@style/roundedChip"/>
-                        </LinearLayout>
-
-                        <!-- Entertainment -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="20dp"
-                            android:background="@drawable/category_item_bg"
-                            android:padding="8dp">
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/ic_entertainment"
-                                android:background="@color/light_green"
-                                android:backgroundTint="#2027AE60"
-                                android:padding="10dp"
-                                android:tint="@color/success_green"/>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginStart="12dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Entertainment"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/primary_text"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="R450 of R600"
-                                    android:textSize="13sp"
-                                    android:textColor="@color/success_green"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="75%"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/success_green"
-                                android:background="@color/light_green"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                app:shapeAppearanceOverlay="@style/roundedChip"/>
-                        </LinearLayout>
-
-                        <!-- Transport -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:background="@drawable/category_item_bg"
-                            android:padding="8dp">
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/ic_transport"
-                                android:background="@color/light_green"
-                                android:backgroundTint="#2027AE60"
-                                android:padding="10dp"
-                                android:tint="@color/success_green"/>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginStart="12dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Transport"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/primary_text"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="R800 of R1,000"
-                                    android:textSize="13sp"
-                                    android:textColor="@color/success_green"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="80%"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/success_green"
-                                android:background="@color/light_green"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                app:shapeAppearanceOverlay="@style/roundedChip"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Quick Actions with fun design -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⚡ Quick Actions"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary_text"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="sans-serif-black"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginBottom="20dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:text="➕ Add Expense"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        app:cornerRadius="30dp"
-                        app:icon="@drawable/ic_add"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        app:backgroundTint="@color/warning_yellow"
-                        android:stateListAnimator="@animator/button_elevation"
-                        style="@style/Widget.MaterialComponents.Button"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="📊 View Reports"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/warning_yellow"
-                        app:cornerRadius="30dp"
-                        app:icon="@drawable/ic_graph"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        app:strokeColor="@color/warning_yellow"
-                        app:strokeWidth="2dp"
-                        app:backgroundTint="@color/white"
-                        android:stateListAnimator="@animator/button_elevation"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-                </LinearLayout>
-
-                <!-- Recent Transactions with fun header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="space_between"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📝 Recent Transactions"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_text"
-                        android:fontFamily="sans-serif-black"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="View All →"
-                        android:textSize="12sp"
-                        android:textColor="@color/warning_yellow"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_button_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
-                </LinearLayout>
-
-                <!-- Recent Transaction 1 with animation -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:layout_marginBottom="8dp"
-                    android:stateListAnimator="@animator/card_elevation_small"
-                    android:backgroundTint="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:src="@drawable/ic_woolworths"
-                            android:background="@color/light_yellow"
-                            android:padding="10dp"
-                            android:tint="@color/warning_yellow"
-                            app:shapeAppearanceOverlay="@style/roundImageView"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Woolworths"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary_text"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="🛒 Groceries • Today at 2:30 PM"
-                                android:textSize="12sp"
-                                android:textColor="@color/secondary_text"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="R450.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_text"
-                            android:background="@color/light_yellow"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            app:shapeAppearanceOverlay="@style/roundedChip"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Recent Transaction 2 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:layout_marginBottom="8dp"
-                    android:stateListAnimator="@animator/card_elevation_small"
-                    android:backgroundTint="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:src="@drawable/ic_uber"
-                            android:background="@color/light_yellow"
-                            android:padding="10dp"
-                            android:tint="@color/warning_yellow"
-                            app:shapeAppearanceOverlay="@style/roundImageView"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Uber"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary_text"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="🚗 Transport • Yesterday at 8:15 PM"
-                                android:textSize="12sp"
-                                android:textColor="@color/secondary_text"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="R85.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_text"
-                            android:background="@color/light_yellow"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            app:shapeAppearanceOverlay="@style/roundedChip"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Recent Transaction 3 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:layout_marginBottom="16dp"
-                    android:stateListAnimator="@animator/card_elevation_small"
-                    android:backgroundTint="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:src="@drawable/ic_cafe"
-                            android:background="@color/light_yellow"
-                            android:padding="10dp"
-                            android:tint="@color/warning_yellow"
-                            app:shapeAppearanceOverlay="@style/roundImageView"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Coffee Shop"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary_text"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="☕ Dining • 2 days ago"
-                                android:textSize="12sp"
-                                android:textColor="@color/secondary_text"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="R125.00"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_text"
-                            android:background="@color/light_yellow"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            app:shapeAppearanceOverlay="@style/roundedChip"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Fun motivational footer -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="24dp"
-                    android:padding="16dp"
-                    android:background="@drawable/footer_background">
-
-                    <ImageView
+                    <!-- Bell -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnReminders"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_bee_happy"
-                        android:layout_marginBottom="8dp"/>
+                        android:minWidth="48dp"
+                        android:minHeight="48dp"
+                        android:layout_marginEnd="10dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#33FFFFFF">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You're doing great! Keep buzzing! 🐝"
-                        android:textSize="14sp"
-                        android:textColor="@color/warning_yellow"
-                        android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="🔔"
+                            android:gravity="center"
+                            android:textSize="20sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You've saved R500 this week"
-                        android:textSize="12sp"
-                        android:textColor="@color/secondary_text"
-                        android:layout_marginTop="4dp"/>
+                    </androidx.cardview.widget.CardView>
+                    <!-- Avatar -->
+                    <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/honey">
+                        <TextView android:id="@+id/tvAvatarInitial" android:layout_width="match_parent" android:layout_height="match_parent" android:text="G" android:gravity="center" android:textColor="@color/black_deep" android:textSize="20sp" android:textStyle="bold" android:fontFamily="sans-serif-black"/>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
+                <androidx.cardview.widget.CardView android:id="@+id/balanceCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_below="@id/greetingRow" app:cardCornerRadius="22dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/honey">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="18dp">
+                        <LinearLayout android:id="@+id/balanceLeft" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_toStartOf="@+id/streakCard" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MONTHLY BUDGET LEFT" android:textColor="#99291A00" android:textSize="10sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:letterSpacing="0.08"/>
+                            <TextView android:id="@+id/tvBalanceAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 3,240" android:textColor="@color/black_deep" android:textSize="40sp" android:fontFamily="@font/fredoka_one"/>
+                            <TextView android:id="@+id/tvBalanceSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="of R 5,000 budget · Mar 2026" android:textColor="#88291A00" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <androidx.cardview.widget.CardView android:id="@+id/streakCard" android:layout_width="64dp" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/black_deep">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="10dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔥7" android:textColor="@color/honey" android:textSize="22sp" android:fontFamily="@font/fredoka_one" android:gravity="center"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="day\nstreak" android:textColor="#99FFF9EC" android:textSize="9sp" android:fontFamily="sans-serif-medium" android:textStyle="bold" android:gravity="center" android:letterSpacing="0.05"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingTop="18dp" android:paddingBottom="100dp">
+                <!-- Quick Cards -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="18dp">
+                    <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="8dp" app:cardCornerRadius="18dp" app:cardElevation="4dp" app:cardBackgroundColor="@color/white">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💸" android:textSize="26sp" android:layout_marginBottom="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPENT" android:textColor="@color/muted_text" android:textSize="10sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:letterSpacing="0.08"/>
+                            <TextView android:id="@+id/tvSpentAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R1,760" android:textColor="@color/black_deep" android:textSize="22sp" android:fontFamily="@font/fredoka_one"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="↑ 12% vs last month" android:textColor="@color/error_red" android:textSize="11sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" app:cardCornerRadius="18dp" app:cardElevation="4dp" app:cardBackgroundColor="@color/white">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏦" android:textSize="26sp" android:layout_marginBottom="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SAVED" android:textColor="@color/muted_text" android:textSize="10sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:letterSpacing="0.08"/>
+                            <TextView android:id="@+id/tvSavedAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 840" android:textColor="@color/black_deep" android:textSize="22sp" android:fontFamily="@font/fredoka_one"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="↓ on track ✓" android:textColor="@color/success_green" android:textSize="11sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+                <!-- Budget Progress -->
+                <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="18dp" app:cardCornerRadius="18dp" app:cardElevation="4dp" app:cardBackgroundColor="@color/white">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="March Budget" android:textColor="@color/black_deep" android:textSize="17sp" android:fontFamily="@font/fredoka_one"/>
+                            <TextView android:id="@+id/tvBudgetBadge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="On Track" android:textColor="@color/white" android:textSize="11sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:background="@drawable/badge_green_bg" android:paddingStart="10dp" android:paddingEnd="10dp" android:paddingTop="4dp" android:paddingBottom="4dp"/>
+                        </LinearLayout>
+                        <ProgressBar android:id="@+id/progressBudget" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="10dp" android:progress="35" android:progressDrawable="@drawable/progress_green" android:indeterminate="false"/>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="R1,760 spent" android:textColor="@color/muted_text" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R5,000 goal" android:textColor="@color/black_deep" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <!-- ── Upcoming Payments Timeline ────────────── -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
 
+                        <!-- Header -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Upcoming Payments"
+                                android:textColor="@color/black_deep"
+                                android:textSize="17sp"
+                                android:fontFamily="@font/fredoka_one" />
+                            <TextView
+                                android:id="@+id/tvSeeAllReminders"
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:minHeight="48dp"
+                                android:minWidth="48dp"
+                                android:gravity="center"
+                                android:text="See All →"
+                                android:textColor="@color/honey_dark"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:paddingHorizontal="12dp"/>
+                        </LinearLayout>
+
+                        <!-- Timeline row: Rent -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="24dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal">
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/cal_dot_honey"
+                                    android:layout_marginTop="6dp" />
+                                <View
+                                    android:layout_width="2dp"
+                                    android:layout_height="50dp"
+                                    android:background="@color/input_stroke" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="12dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1 Apr 2026"
+                                    android:textColor="@color/muted_text"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginTop="4dp">
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        app:cardCornerRadius="10dp"
+                                        app:cardElevation="0dp"
+                                        app:cardBackgroundColor="#FFF3D0">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="🏠"
+                                            android:gravity="center"
+                                            android:textSize="16sp" />
+                                    </androidx.cardview.widget.CardView>
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="8dp"
+                                        android:text="Rent"
+                                        android:textColor="@color/black_deep"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif-medium" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="R 5,000"
+                                        android:textColor="@color/black_deep"
+                                        android:textSize="14sp"
+                                        android:fontFamily="@font/fredoka_one" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Timeline row: Netflix (last — no line) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="24dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal">
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/cal_dot_honey"
+                                    android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15 Apr 2026"
+                                    android:textColor="@color/muted_text"
+                                    android:textSize="11sp"
+                                    android:fontFamily="sans-serif-medium" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginTop="4dp">
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        app:cardCornerRadius="10dp"
+                                        app:cardElevation="0dp"
+                                        app:cardBackgroundColor="#FFE4E4">
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="📺"
+                                            android:gravity="center"
+                                            android:textSize="16sp" />
+                                    </androidx.cardview.widget.CardView>
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="8dp"
+                                        android:text="Netflix"
+                                        android:textColor="@color/black_deep"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif-medium" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="R 199"
+                                        android:textColor="@color/black_deep"
+                                        android:textSize="14sp"
+                                        android:fontFamily="@font/fredoka_one" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Top Spending -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Top Spending" android:textColor="@color/black_deep" android:textSize="18sp" android:fontFamily="@font/fredoka_one"/>
+                    <TextView android:id="@+id/tvSeeAllCats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="See All →" android:textColor="@color/honey_dark" android:textSize="12sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:clickable="true" android:focusable="true" android:padding="4dp"/>
+                </LinearLayout>
+                <!-- Groceries -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <androidx.cardview.widget.CardView android:layout_width="40dp" android:layout_height="40dp" app:cardCornerRadius="13dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFF3D0">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🛒" android:gravity="center" android:textSize="20sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Groceries" android:textColor="@color/black_deep" android:textSize="13sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 640 / R 1,000" android:textColor="@color/muted_text" android:textSize="11sp" android:fontFamily="sans-serif-medium"/>
+                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:layout_marginTop="5dp" android:progress="64" android:progressDrawable="@drawable/progress_honey" android:indeterminate="false"/>
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 640" android:textColor="@color/black_deep" android:textSize="16sp" android:fontFamily="@font/fredoka_one" android:layout_marginStart="10dp"/>
+                </LinearLayout>
+                <!-- Entertainment -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="18dp">
+                    <androidx.cardview.widget.CardView android:layout_width="40dp" android:layout_height="40dp" app:cardCornerRadius="13dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFE4E4">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🎬" android:gravity="center" android:textSize="20sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Entertainment" android:textColor="@color/black_deep" android:textSize="13sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 480 / R 500 · Over limit!" android:textColor="@color/error_red" android:textSize="11sp" android:fontFamily="sans-serif-medium"/>
+                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:layout_marginTop="5dp" android:progress="96" android:progressDrawable="@drawable/progress_red" android:indeterminate="false"/>
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R 480" android:textColor="@color/error_red" android:textSize="16sp" android:fontFamily="@font/fredoka_one" android:layout_marginStart="10dp"/>
+                </LinearLayout>
+                <!-- Recent Transactions -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Recent" android:textColor="@color/black_deep" android:textSize="18sp" android:fontFamily="@font/fredoka_one"/>
+                    <TextView android:id="@+id/tvSeeAllTx" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="See All →" android:textColor="@color/honey_dark" android:textSize="12sp" android:textStyle="bold" android:fontFamily="sans-serif-medium" android:clickable="true" android:focusable="true" android:padding="4dp"/>
+                </LinearLayout>
+                <!-- Mugg & Bean -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="12dp" android:paddingBottom="12dp">
+                    <androidx.cardview.widget.CardView android:layout_width="42dp" android:layout_height="42dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFF3D0">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="☕" android:gravity="center" android:textSize="22sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mugg &amp; Bean" android:textColor="@color/black_deep" android:textSize="14sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Food &amp; Drink · Today" android:textColor="@color/muted_text" android:textSize="11sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-R 85" android:textColor="@color/error_red" android:textSize="17sp" android:fontFamily="@font/fredoka_one"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Today" android:textColor="@color/muted_text" android:textSize="10sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/input_stroke"/>
+                <!-- Engen -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="12dp" android:paddingBottom="12dp">
+                    <androidx.cardview.widget.CardView android:layout_width="42dp" android:layout_height="42dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="#E4F7FF">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="⛽" android:gravity="center" android:textSize="22sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Engen Fuel" android:textColor="@color/black_deep" android:textSize="14sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Transport · Yesterday" android:textColor="@color/muted_text" android:textSize="11sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-R 650" android:textColor="@color/error_red" android:textSize="17sp" android:fontFamily="@font/fredoka_one"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yesterday" android:textColor="@color/muted_text" android:textSize="10sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/input_stroke"/>
+                <!-- Woolworths -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="12dp" android:paddingBottom="12dp">
+                    <androidx.cardview.widget.CardView android:layout_width="42dp" android:layout_height="42dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFF3D0">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🛒" android:gravity="center" android:textSize="22sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Woolworths" android:textColor="@color/black_deep" android:textSize="14sp" android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Groceries · 2 days ago" android:textColor="@color/muted_text" android:textSize="11sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-R 450" android:textColor="@color/error_red" android:textSize="17sp" android:fontFamily="@font/fredoka_one"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2 days ago" android:textColor="@color/muted_text" android:textSize="10sp" android:fontFamily="sans-serif-medium"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
-
-        <!-- Bottom Navigation Bar with custom animation -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/bottom_nav_background"
-            app:menu="@menu/bottom_nav_menu"
-            app:itemIconTint="@color/bottom_nav_color_selector"
-            app:itemTextColor="@color/bottom_nav_color_selector"
-            app:labelVisibilityMode="labeled"
-            app:elevation="8dp"
-            app:itemIconSize="24dp"/>
-
+        </LinearLayout>
+    </ScrollView>
+    <!-- BOTTOM NAV -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="72dp" android:layout_gravity="bottom" android:background="@color/white" android:orientation="horizontal" android:gravity="center_vertical" android:elevation="12dp" android:paddingBottom="8dp">
+        <LinearLayout android:id="@+id/navHome" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFD454">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🏠" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/honey_dark" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navExpenses" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="📋" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Expenses" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center">
+            <androidx.cardview.widget.CardView android:id="@+id/fabAddExpense" android:layout_width="54dp" android:layout_height="54dp" android:layout_marginBottom="10dp" app:cardCornerRadius="18dp" app:cardElevation="8dp" app:cardBackgroundColor="@color/honey" android:clickable="true" android:focusable="true">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="+" android:gravity="center" android:textColor="@color/black_deep" android:textSize="30sp" android:fontFamily="sans-serif-black"/>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navGoals" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🎯" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Goals" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navBadges" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp" app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="🏆" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Badges" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
     </LinearLayout>
-
-    <!-- Navigation Drawer with fun header -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header_fun"
-        app:menu="@menu/drawer_menu"
-        app:itemIconTint="@color/warning_yellow"
-        app:itemTextColor="@color/primary_text"
-        app:itemBackground="@drawable/nav_item_selector"/>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

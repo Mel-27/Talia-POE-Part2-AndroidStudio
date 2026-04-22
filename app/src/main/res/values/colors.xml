@@ -32,6 +32,16 @@
     <color name="card_background">#FFFFFF</color>
     <color name="white_alpha_20">#33FFFFFF</color>
     <color name="white_alpha_30">#4DFFFFFF</color>
+    <color name="honey_yellow">#FFB800</color>
+    <color name="charcoal">#2D2416</color>
+    <color name="cream_white">#FFF9EC</color>               ║
+    ║    <color name="honey_dark">#E09000</color>                   ║
+    ║    <color name="cream">#FFF9EC</color>                       ║
+    ║    <color name="cream2">#FFF3D0</color>                      ║
+    ║    <color name="input_stroke">#EDE4C8</color>                ║
+    ║    <color name="muted_text">#8A7B5A</color>
+    <color name="honey">#FFB800</color>                          ║
+    ║  <color name="black_deep">#1A1208</color>
 
     <!-- Bottom Navigation Specific Colors -->
     <color name="bottom_nav_icon_default">#8E8E8E</color>

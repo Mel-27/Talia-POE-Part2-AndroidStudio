@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.POE_DEMO">
         <activity
+            android:name=".PieSlice"
+            android:exported="false"
+            android:theme="@style/Theme.POE_DEMO" />
+        <activity
+            android:name=".activity_budget_goals"
+            android:exported="false" />
+        <activity
+            android:name=".activity_splash"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
