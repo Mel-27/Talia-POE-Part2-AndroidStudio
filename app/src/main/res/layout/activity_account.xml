@@ -30,9 +30,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ════════════════════════════════════════════
-                 DARK HEADER
-            ════════════════════════════════════════════ -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,7 +139,7 @@
             </LinearLayout>
 
             <!-- ════════════════════════════════════════════
-                 BODY
+                 BODY of the code
             ════════════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
