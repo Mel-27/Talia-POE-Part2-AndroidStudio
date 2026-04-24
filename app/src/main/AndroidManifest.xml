@@ -11,25 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.POE_DEMO">
+
+
+
+        <!-- ✅ Splash now opens first -->
         <activity
-            android:name=".PieSlice"
-            android:exported="false"
-            android:theme="@style/Theme.POE_DEMO" />
-        <activity
-            android:name=".activity_budget_goals"
-            android:exported="false" />
-        <activity
-            android:name=".activity_splash"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ✅ MainActivity no longer the launcher -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

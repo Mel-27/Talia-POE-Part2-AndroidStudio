@@ -27,29 +27,30 @@
         android:strokeColor="#FFC107"
         android:fillColor="#00000000"/>
 
-    <!-- Door handle -->
-    <circle
-        android:cx="12.5"
-        android:cy="17.5"
-        android:r="0.8"
-        android:fillColor="#FFC107"/>
+    <!-- Door handle cx=12.5 cy=17.5 r=0.8 -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M12.5,16.7 A0.8,0.8 0 1,0 12.5,18.3 A0.8,0.8 0 1,0 12.5,16.7 Z"/>
 
-    <!-- Window -->
+    <!-- Window left -->
     <path
         android:pathData="M6,12L9,12L9,15L6,15L6,12Z"
         android:strokeWidth="1"
         android:strokeColor="#FFC107"
         android:fillColor="#00000000"/>
+
+    <!-- Window right -->
     <path
         android:pathData="M15,12L18,12L18,15L15,15L15,12Z"
         android:strokeWidth="1"
         android:strokeColor="#FFC107"
         android:fillColor="#00000000"/>
 
-    <!-- Store name "W" suggestion -->
+    <!-- Store name "W" -->
     <path
         android:pathData="M8,17L9,19L10,17L11,19L12,17"
         android:strokeWidth="1"
         android:strokeColor="#FFC107"
         android:strokeLineCap="round"/>
+
 </vector>

@@ -1,4 +1,4 @@
-package com.gia.poe_demo
+/*package com.gia.poe_demo
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -42,3 +42,5 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 }
+
+ */
