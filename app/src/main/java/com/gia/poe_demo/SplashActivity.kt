@@ -15,20 +15,17 @@ class SplashActivity : AppCompatActivity() {
     private val dotStates = listOf(".", "..", "...")
     private var dotIndex = 0
 
-    // Total splash duration in milliseconds
     private val SPLASH_DURATION = 3000L
-    // Dot animation interval
     private val DOT_INTERVAL = 400L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash) // 👈 match your XML file name
+        setContentView(R.layout.activity_splash)
 
         val tvLoadingDots = findViewById<android.widget.TextView>(R.id.tvLoadingDots)
 
         loadingDotsHandler = Handler(Looper.getMainLooper())
 
-        // Animate the dots: "." → ".." → "..." → repeat
         loadingDotsRunnable = object : Runnable {
             override fun run() {
                 tvLoadingDots.text = dotStates[dotIndex % dotStates.size]
@@ -38,16 +35,21 @@ class SplashActivity : AppCompatActivity() {
         }
         loadingDotsHandler.post(loadingDotsRunnable)
 
-        // Navigate to MainActivity after the splash duration
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
-            finish() // Remove splash from back stack
+            val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+            val isRegistered = prefs.getBoolean("isRegistered", false)
+
+            if (isRegistered) {
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this, OnboardingActivity::class.java))
+            }
+            finish()
         }, SPLASH_DURATION)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Clean up to prevent memory leaks
         loadingDotsHandler.removeCallbacks(loadingDotsRunnable)
     }
 }

@@ -1,16 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║     BUDGET BEE — Budget Goals Screen                        ║
-    ║                                                              ║
-    ║  • Cream top bar: logo + "Budget Bee" (matches dashboard)   ║
-    ║  • Dark charcoal header with honey summary card             ║
-    ║  • Monthly budget inline edit card                          ║
-    ║  • Vertical bar chart — Spending Breakdown                  ║
-    ║  • 5 category limit cards with inline editing               ║
-    ║  • Bottom nav — Goals tab active                            ║
-    ╚══════════════════════════════════════════════════════════════╝
--->
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

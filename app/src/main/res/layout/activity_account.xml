@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║     BUDGET BEE — Account Details Screen                     ║
-    ║                                                              ║
-    ║  • Opened by tapping the avatar initial on the dashboard    ║
-    ║  • Dark header with avatar + name + email                   ║
-    ║  • Editable profile fields (name, email)                    ║
-    ║  • App preferences (notifications, dark mode)               ║
-    ║  • Danger zone (reset data, sign out)                       ║
-    ╚══════════════════════════════════════════════════════════════╝
--->
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

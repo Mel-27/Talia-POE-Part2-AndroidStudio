@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║     BUDGET BEE — Add Expense (Matches Design System)        ║
-    ║                                                              ║
-    ║  • Cream background                                          ║
-    ║  • ← Back above Fredoka One title                            ║
-    ║  • Honey accents, white cards, 18dp corner radius            ║
-    ║  • OutlinedBox fields with honey stroke, no startIconDrawable║
-    ║  • Dashed photo upload area                                  ║
-    ║  • 🍯 Save Expense honey pill button                         ║
-    ║  • No bottom nav (modal flow)                                ║
-    ╚══════════════════════════════════════════════════════════════╝
--->
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

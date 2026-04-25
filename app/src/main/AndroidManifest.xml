@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.POE_DEMO">
 
-
-
-        <!-- ✅ Splash now opens first -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -24,7 +21,18 @@
             </intent-filter>
         </activity>
 
-        <!-- ✅ MainActivity no longer the launcher -->
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
