@@ -4,11 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
+// extended AppCompatActivity which is just the standard way Android activities work
+// ref: https://developer.android.com/guide/components/activities/intro-activities
 class OnboardingActivity : AppCompatActivity() {
 
+    // keeping track of which screen the user is on
     private var currentScreen = 1
     private val totalScreens = 5
 
+    // stored all five layouts in a mapOf() so I could load them dynamically with setContentView()
+    // ref: https://developer.android.com/reference/androidx/appcompat/app/AppCompatActivity
     private val layouts = mapOf(
         1 to R.layout.onboarding_screen_1,
         2 to R.layout.onboarding_screen_2,
@@ -17,11 +22,15 @@ class OnboardingActivity : AppCompatActivity() {
         5 to R.layout.onboarding_screen_5
     )
 
+    // loads the first screen when the activity starts
+    // ref: https://developer.android.com/guide/components/activities/activity-lifecycle#onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadScreen(currentScreen)
     }
 
+    // used findViewById() to grab the Next and Skip buttons and set click listeners on them
+    // ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener)
     private fun loadScreen(screen: Int) {
         setContentView(layouts[screen]!!)
 
@@ -41,6 +50,8 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
+    // navigates to LoginActivity using an Intent and calls finish() so the user cant go back
+    // ref: https://developer.android.com/guide/components/intents-filters
     private fun goToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
