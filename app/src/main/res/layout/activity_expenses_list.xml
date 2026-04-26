@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
     Reference:
     Used for implementing RecyclerView and layout structure:
@@ -6,6 +7,7 @@
     https://www.geeksforgeeks.org/android/android-recyclerview/.
     [Accessed 26 Apr. 2026]
 -->
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -52,7 +54,7 @@
 
             </LinearLayout>
 
-            <!-- Dark Page Header  -->
+            <!-- Dark Page Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -193,7 +195,7 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="100dp">
 
-                <!-- Date Filter Chips -->
+                <!-- Date Filter Chips  -->
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -264,7 +266,7 @@
 
                 </HorizontalScrollView>
 
-                <!--  Always-visible Date Range Row -->
+                <!-- Date Range Row  -->
                 <LinearLayout
                     android:id="@+id/dateRangeRow"
                     android:layout_width="match_parent"
@@ -331,7 +333,7 @@
                     app:strokeWidth="2dp"
                     app:cornerRadius="14dp" />
 
-                <!--  Sort Row  -->
+                <!-- Sort Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -404,8 +406,7 @@
 
                 </LinearLayout>
 
-                <!-- RecyclerView - replaces all hardcoded expense cards -->
-                <!-- GeeksforGeeks (2025) -->
+                <!-- RecyclerView used to display and group expense items by date(GeeksforGeeks, 2025) -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExpenses"
                     android:layout_width="match_parent"
@@ -413,48 +414,92 @@
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false" />
 
-                <!-- Empty state - shown when no expenses exist for the selected period -->
-                <LinearLayout
-                    android:id="@+id/layoutEmptyState"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:paddingTop="48dp"
-                    android:paddingBottom="48dp"
-                    android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🍯"
-                        android:textSize="48sp"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="No expenses found"
-                        android:textColor="@color/black_deep"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Try a different date range"
-                        android:textColor="@color/muted_text"
-                        android:textSize="13sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center" />
-
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
+
+    </LinearLayout>
+
     </ScrollView>
+
+    <!-- BOTTOM NAVIGATION BAR-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:elevation="12dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout android:id="@+id/navHome"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp"
+                app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:text="&#127968;" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Home" android:textSize="10sp" android:textStyle="bold"
+                android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navExpenses"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp"
+                app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFD454">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:text="&#128203;" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Expenses" android:textSize="10sp" android:textStyle="bold"
+                android:textColor="@color/honey_dark" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center">
+            <androidx.cardview.widget.CardView android:id="@+id/fabAddExpense"
+                android:layout_width="54dp" android:layout_height="54dp" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="18dp" app:cardElevation="8dp" app:cardBackgroundColor="@color/honey"
+                android:clickable="true" android:focusable="true">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:text="+" android:gravity="center" android:textColor="@color/black_deep"
+                    android:textSize="30sp" android:fontFamily="sans-serif-black"/>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navGoals"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp"
+                app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:text="&#127919;" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Goals" android:textSize="10sp" android:textStyle="bold"
+                android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navBadges"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <androidx.cardview.widget.CardView android:layout_width="44dp" android:layout_height="44dp"
+                app:cardCornerRadius="14dp" app:cardElevation="0dp" app:cardBackgroundColor="@android:color/transparent">
+                <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:text="&#127942;" android:gravity="center" android:textSize="20sp"/>
+            </androidx.cardview.widget.CardView>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Badges" android:textSize="10sp" android:textStyle="bold"
+                android:textColor="@color/muted_text" android:fontFamily="sans-serif-medium" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
