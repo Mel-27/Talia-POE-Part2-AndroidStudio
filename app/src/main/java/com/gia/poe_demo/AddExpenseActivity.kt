@@ -24,6 +24,7 @@ class AddExpenseActivity : AppCompatActivity() {
         val etDate         = findViewById<TextInputEditText>(R.id.etDate)
         val tilDescription = findViewById<TextInputLayout>(R.id.tilDescription)
         val tilAmount      = findViewById<TextInputLayout>(R.id.tilAmount)
+        val userId = intent.getIntExtra("USER_ID", -1)
         val db             = AppDatabase.getInstance(this)
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -60,6 +61,7 @@ class AddExpenseActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 db.expenseDao().insert(
                     Expense(
+                        userId = userId,
                         description = description,
                         amount      = amount.toDouble(),
                         date        = date
@@ -71,3 +73,8 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 }
+
+//References:
+//https://www.geeksforgeeks.org/kotlin/material-design-date-picker-in-android-using-kotlin/
+//https://developer.android.com/topic/libraries/architecture/coroutines
+//https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
