@@ -33,6 +33,7 @@ class AddExpenseActivity : AppCompatActivity() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener { selection ->
+            etDate.tag = selection
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             etDate.setText(sdf.format(Date(selection)))
         }
@@ -59,6 +60,9 @@ class AddExpenseActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
+
+                val date = etDate.tag as? Long ?: System.currentTimeMillis()
+
                 db.expenseDao().insert(
                     Expense(
                         userId = userId,
