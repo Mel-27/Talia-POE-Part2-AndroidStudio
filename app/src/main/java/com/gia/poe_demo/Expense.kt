@@ -1,7 +1,7 @@
 package com.gia.poe_demo
 
-import androidx.room3.Entity
-import androidx.room3.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "expenses")
 data class Expense(
