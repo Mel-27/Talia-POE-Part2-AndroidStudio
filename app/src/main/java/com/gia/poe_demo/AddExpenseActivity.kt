@@ -1,6 +1,7 @@
 package com.gia.poe_demo
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -101,6 +102,19 @@ class AddExpenseActivity : AppCompatActivity() {
                         date        = date
                     )
                 )
+
+
+                val prefs  = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+                val userId = prefs.getInt("loggedInUserId", -1)
+                if (userId != -1) {
+                    val existing = db.honeyPointsDao().getPointsForUser(userId)
+                    if (existing == null) {
+                        db.honeyPointsDao().upsert(HoneyPoints(userId = userId, points = 5))
+                    } else {
+                        db.honeyPointsDao().addPoints(userId, GamificationManager.POINTS_ADD_EXPENSE)
+                    }
+                    Log.d("AddExpense", "Awarded ${GamificationManager.POINTS_ADD_EXPENSE} Honey Points to userId=$userId")
+                }
                 // Notify user of success
                 Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
                 // Close activity after saving
