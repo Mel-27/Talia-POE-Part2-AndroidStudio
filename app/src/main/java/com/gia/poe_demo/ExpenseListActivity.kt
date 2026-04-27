@@ -35,6 +35,11 @@ import java.util.Locale
  * https://developer.android.com/guide/components/intents-filters.
  * [Accessed 27 Apr. 2026]
  *
+ * Used for creating and configuring the MaterialDatePicker using Builder pattern:
+ * Android Developers. (2025). MaterialDatePicker.Builder  |  API reference  |  Android Developers. Available at:
+ * https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker.Builder.
+ * [Accessed 27 Apr. 2026]
+ *
  * Used for loading Room database data asynchronously using coroutines (lifecycleScope):
  * David (2021). Using coroutines with Android Room database. Stack Overflow. Available at:
  * https://stackoverflow.com/questions/68126665/using-coroutines-with-android-room-database.
@@ -45,6 +50,12 @@ import java.util.Locale
  * GeeksforGeeks (2025). RecyclerView in Android with Example. GeeksforGeeks. Available at:
  * https://www.geeksforgeeks.org/android/android-recyclerview/.
  * [Accessed 26 Apr. 2026]
+ *
+ * Used for displaying the MaterialDatePicker using supportFragmentManager and
+ * handling user date selection events:
+ * GeeksforGeeks (2022). Material Design Date Picker in Android using Kotlin. GeeksforGeeks. Available at:
+ * https://www.geeksforgeeks.org/kotlin/material-design-date-picker-in-android-using-kotlin/
+ * [Accessed 27 Apr. 2026].
  *
  * Used for loading data from Room database and updating RecyclerView when the expense list
  * changes:
@@ -66,7 +77,10 @@ import java.util.Locale
  * https://stackoverflow.com/questions/67858149/how-to-sort-reccyclerview-in-kotlin-android.
  * [Accessed 27 Apr. 2026]
  *
- *
+ * Used for converting millisecond timestamp values into readable date formats:
+ * Zee (2018). Java convert millisecond timestamp to date with respect to given timezone. Stack Overflow. Available at:
+ * https://stackoverflow.com/questions/48714322/java-convert-millisecond-timestamp-to-date-with-respect-to-given-timezone.
+ * [Accessed 27 Apr. 2026]
  *
  */
 
@@ -250,14 +264,17 @@ class ExpenseListActivity : AppCompatActivity() {
         val btnEndDate   = findViewById<MaterialButton>(R.id.btnEndDate)
 
         btnStartDate.setOnClickListener {
+            // Creating single-date picker (Android Developers, 2025)
             val picker = MaterialDatePicker.Builder
                 .datePicker()
                 .setTitleText("Select start date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build()
 
+             // (Android Developers, 2025)
             picker.addOnPositiveButtonClickListener { selection ->
                 val sdf  = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                // Converting milliseconds to Date object (StackOverflow, 2018)
                 val date = sdf.format(Date(selection))
                 customStartDate   = date
                 btnStartDate.text = "📅 $date"
@@ -270,6 +287,7 @@ class ExpenseListActivity : AppCompatActivity() {
                 }
             }
 
+            // Displays the MaterialDatePicker using FragmentManager (GeeksforGeeks, 2025)
             picker.show(supportFragmentManager, "START_DATE_PICKER")
         }
 
@@ -294,6 +312,7 @@ class ExpenseListActivity : AppCompatActivity() {
                 }
             }
 
+            // (GeeksforGeeks, 2025)
             picker.show(supportFragmentManager, "END_DATE_PICKER")
         }
     }
@@ -489,19 +508,19 @@ class ExpenseListActivity : AppCompatActivity() {
         // Add Expense (+)
         findViewById<CardView>(R.id.fabAddExpense).setOnClickListener {
             Log.d(TAG, "fabAddExpense clicked")
-             startActivity(Intent(this, AddExpenseActivity::class.java))
+            startActivity(Intent(this, AddExpenseActivity::class.java))
         }
 
         // Goals
         findViewById<LinearLayout>(R.id.navGoals).setOnClickListener {
             Log.d(TAG, "navGoals clicked")
-             startActivity(Intent(this, GoalsActivity::class.java))
+            startActivity(Intent(this, GoalsActivity::class.java))
         }
 
         // Badges
         findViewById<LinearLayout>(R.id.navBadges).setOnClickListener {
             Log.d(TAG, "navBadges clicked")
-            startActivity(Intent(this, BadgesActivity::class.java))
+          startActivity(Intent(this, BadgesActivity::class.java))
         }
     }
 }
