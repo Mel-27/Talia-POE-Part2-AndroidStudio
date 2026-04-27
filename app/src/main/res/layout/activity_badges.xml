@@ -197,6 +197,7 @@
 
                     <!-- Badge 1: Worker Bee — EARNED -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardBadge1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -224,6 +225,7 @@
 
                     <!-- Badge 2: Honey Collector — LOCKED -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardBadge2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -261,6 +263,7 @@
 
                     <!-- Badge 3: Honey Hoarder — LOCKED -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardBadge3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -289,6 +292,7 @@
 
                     <!-- Badge 4: Queen Bee — LOCKED -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardBadge4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
