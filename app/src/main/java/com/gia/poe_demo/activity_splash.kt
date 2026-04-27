@@ -1,60 +1,20 @@
 package com.gia.poe_demo
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
-class SplashActivity : AppCompatActivity() {
-
-    private val screens = listOf(
-        R.layout.activity_splash,
-        R.layout.onboarding_screen_1,
-        R.layout.onboarding_screen_2,
-        R.layout.onboarding_screen_3,
-        R.layout.onboarding_screen_4,
-        R.layout.onboarding_screen_5
-    )
-
-    private var currentScreen = 0
-
+class activity_splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showScreen(currentScreen)
-    }
-
-    private fun showScreen(index: Int) {
-        if (index !in screens.indices) {
-            goToHome()
-            return
-        }
-
-        setContentView(screens[index])
-
-        val btnNext = findViewById<Button?>(R.id.btnNext)
-        val btnSkip = findViewById<Button?>(R.id.btnSkip)
-        val btnGetStarted = findViewById<Button?>(R.id.btnGetStarted)
-
-        btnNext?.setOnClickListener {
-            if (currentScreen < screens.lastIndex) {
-                currentScreen++
-                showScreen(currentScreen)
-            } else {
-                goToHome()
-            }
-        }
-
-        btnSkip?.setOnClickListener {
-            goToHome()
-        }
-
-        btnGetStarted?.setOnClickListener {
-            goToHome()
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.onboarding_screen_1)
+        setContentView(R.layout.onboarding_screen_2)
+        setContentView(R.layout.onboarding_screen_3)
+        setContentView(R.layout.onboarding_screen_4)
+        setContentView(R.layout.onboarding_screen_5)
         }
     }
-
-    private fun goToHome() {
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
-    }
-}
