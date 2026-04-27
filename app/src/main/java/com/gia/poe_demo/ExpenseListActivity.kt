@@ -11,7 +11,13 @@ import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 /**
  * ExpenseListActivity - Shows the user's full expense history.
@@ -106,6 +112,7 @@ class ExpenseListActivity : AppCompatActivity() {
         setupBottomNav()
         setupSortButtons()
         setupChipFilters()
+        setupDateRangePickers()
         loadExpenses()
     }
 
@@ -233,6 +240,80 @@ class ExpenseListActivity : AppCompatActivity() {
         }
     }
 
+    // Custom date range pickers
+
+    /**
+     * Sets up the Start Date and End Date Material date picker buttons.
+     */
+    private fun setupDateRangePickers() {
+        val btnStartDate = findViewById<MaterialButton>(R.id.btnStartDate)
+        val btnEndDate   = findViewById<MaterialButton>(R.id.btnEndDate)
+
+        btnStartDate.setOnClickListener {
+            val picker = MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Select start date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+            picker.addOnPositiveButtonClickListener { selection ->
+                val sdf  = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val date = sdf.format(Date(selection))
+                customStartDate   = date
+                btnStartDate.text = "📅 $date"
+                Log.d(TAG, "Start date selected: $date")
+
+                // Auto-apply filter if end date already set
+                if (customEndDate != null) {
+                    clearChipSelection()
+                    applyCurrentFiltersAndSort()
+                }
+            }
+
+            picker.show(supportFragmentManager, "START_DATE_PICKER")
+        }
+
+        btnEndDate.setOnClickListener {
+            val picker = MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Select end date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+            picker.addOnPositiveButtonClickListener { selection ->
+                val sdf  = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val date = sdf.format(Date(selection))
+                customEndDate   = date
+                btnEndDate.text = "📅 $date"
+                Log.d(TAG, "End date selected: $date")
+
+                // Auto-apply filter if start date already set
+                if (customStartDate != null) {
+                    clearChipSelection()
+                    applyCurrentFiltersAndSort()
+                }
+            }
+
+            picker.show(supportFragmentManager, "END_DATE_PICKER")
+        }
+    }
+
+    /**
+     * Clears the visual highlight from all chips when a custom date range is applied instead.
+     */
+    private fun clearChipSelection() {
+        activeChip = "CUSTOM"
+        val chipThisMonth = findViewById<TextView>(R.id.chipThisMonth)
+        val chipLast7     = findViewById<TextView>(R.id.chipLast7)
+        val chip3Months   = findViewById<TextView>(R.id.chip3Months)
+        listOf(chipThisMonth, chipLast7, chip3Months).forEach { chip ->
+            chip.setBackgroundResource(R.drawable.tab_row_bg)
+            chip.setTextColor(getColor(R.color.muted_text))
+        }
+        Log.d(TAG, "Chip selection cleared - using custom date range")
+    }
+
+    // Filter and Sort
     /**
      * Central function that applies the current sort order to allExpenses
      * (StackOverflow, 2021)
@@ -280,7 +361,7 @@ class ExpenseListActivity : AppCompatActivity() {
                 sdf.format(today.time)
             }
             else -> {
-                // THIS_MONTH — from the 1st of the current month
+                // THIS_MONTH - from the 1st of the current month
                 today.set(java.util.Calendar.DAY_OF_MONTH, 1)
                 sdf.format(today.time)
             }
@@ -334,7 +415,7 @@ class ExpenseListActivity : AppCompatActivity() {
                 applyCurrentFiltersAndSort()
 
             } catch (e: Exception) {
-                Log.e(TAG, "loadExpenses: error — ${e.message}", e)
+                Log.e(TAG, "loadExpenses: error - ${e.message}", e)
             }
         }
     }
@@ -402,7 +483,7 @@ class ExpenseListActivity : AppCompatActivity() {
 
         // Expenses
         findViewById<LinearLayout>(R.id.navExpenses).setOnClickListener {
-            Log.d(TAG, "navExpenses clicked — already on this screen")
+            Log.d(TAG, "navExpenses clicked - already on this screen")
         }
 
         // Add Expense (+)
