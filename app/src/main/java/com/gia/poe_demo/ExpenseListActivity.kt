@@ -508,7 +508,7 @@ class ExpenseListActivity : AppCompatActivity() {
         // Add Expense (+)
         findViewById<CardView>(R.id.fabAddExpense).setOnClickListener {
             Log.d(TAG, "fabAddExpense clicked")
-            startActivity(Intent(this, AddExpenseActivity::class.java))
+           startActivity(Intent(this, AddExpenseActivity::class.java))
         }
 
         // Goals
@@ -520,7 +520,7 @@ class ExpenseListActivity : AppCompatActivity() {
         // Badges
         findViewById<LinearLayout>(R.id.navBadges).setOnClickListener {
             Log.d(TAG, "navBadges clicked")
-          startActivity(Intent(this, BadgesActivity::class.java))
+         startActivity(Intent(this, BadgesActivity::class.java))
         }
     }
 }

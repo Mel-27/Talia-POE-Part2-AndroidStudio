@@ -14,7 +14,7 @@
 
 
 
-        <!-- ✅ Splash now opens first -->
+        <!-- Splash screen opens first -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <!-- ✅ MainActivity no longer the launcher -->
+        <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
