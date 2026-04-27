@@ -29,6 +29,17 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <!-- Expense list screen -->
+        <activity
+            android:name=".ExpenseListActivity"
+            android:exported="false" />
+
+        <!-- Receipt Photo Viewer -->
+        <activity
+            android:name=".ReceiptViewActivity"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>
