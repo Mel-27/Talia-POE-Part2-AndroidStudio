@@ -46,10 +46,20 @@ import kotlinx.coroutines.launch
  * https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
  * [Accessed 26 Apr. 2026]
  *
+ * Used for implementing data filtering logic:
+ * Meyta Taliti (2022). Simple List with Date Range Filter - Meyta Taliti - Medium. Medium. Available at:
+ * https://medium.com/@meytataliti/simple-list-with-date-range-filter-19bd71761495.
+ * [Accessed 27 Apr. 2026]
+ *
+ * user1061793 (2012). How to add days into the date in android. Stack Overflow. Available at:
+ * https://stackoverflow.com/questions/8738369/how-to-add-days-into-the-date-in-android.
+ * [Accessed 27 Apr. 2026]
+ *
  * Used for implementing toggle-based sorting logic in the RecyclerView:
  * Singh, P. (2021). How to sort reccyclerview in kotlin android. Stack Overflow. Available at:
  * https://stackoverflow.com/questions/67858149/how-to-sort-reccyclerview-in-kotlin-android.
  * [Accessed 27 Apr. 2026]
+ *
  *
  *
  */
@@ -228,12 +238,12 @@ class ExpenseListActivity : AppCompatActivity() {
      * (StackOverflow, 2021)
      */
         private fun applyCurrentFiltersAndSort() {
-        // Determine date range from chip or custom dates
+        // Determine date range from chip or custom dates (Medium, 2022)
         val filtered = if (customStartDate != null && customEndDate != null) {
             // Custom date range takes priority over chips
             filterByDateRange(allExpenses, customStartDate!!, customEndDate!!)
         } else {
-            // Use the active chip range
+            // Use the active chip range (Medium, 2022)
             val (start, end) = getChipDateRange(activeChip)
             filterByDateRange(allExpenses, start, end)
         }
@@ -255,14 +265,17 @@ class ExpenseListActivity : AppCompatActivity() {
     private fun getChipDateRange(chip: String): Pair<String, String> {
         val sdf   = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
         val today = java.util.Calendar.getInstance()
+        // Calendar usage for dynamic date manipulation (StackOverflow, 2012)
         val end   = sdf.format(today.time)
 
         val start = when (chip) {
             "LAST_7" -> {
+                // Adding/subtracting days using Calendar (StackOverflow, 2012)
                 today.add(java.util.Calendar.DAY_OF_YEAR, -7)
                 sdf.format(today.time)
             }
             "3_MONTHS" -> {
+                // Calendar.MONTH manipulation for range shifts (StackOverflow, 2012)
                 today.add(java.util.Calendar.MONTH, -3)
                 sdf.format(today.time)
             }
@@ -289,6 +302,7 @@ class ExpenseListActivity : AppCompatActivity() {
 
         return expenses.filter { expense ->
             val expenseDate = sdf.parse(expense.date)
+            // Core filtering logic based on date comparison
             expenseDate != null && !expenseDate.before(startDate) && !expenseDate.after(endDate)
         }
     }
