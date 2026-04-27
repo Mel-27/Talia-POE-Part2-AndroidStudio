@@ -1,20 +1,50 @@
 package com.gia.poe_demo
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
-class activity_splash : AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
+
+    private val screens = listOf(
+        R.layout.activity_splash,
+        R.layout.onboarding_screen_1,
+        R.layout.onboarding_screen_2,
+        R.layout.onboarding_screen_3,
+        R.layout.onboarding_screen_4,
+        R.layout.onboarding_screen_5
+    )
+    private var currentScreen = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_onboarding)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        showScreen(currentScreen)
+    }
+
+    private fun showScreen(index: Int) {
+        setContentView(screens[index])
+
+        findViewById<Button>(R.id.btnNext)?.setOnClickListener {
+            if (currentScreen < screens.lastIndex) {
+                currentScreen++
+                showScreen(currentScreen)
+            } else {
+                goToHome()
+            }
         }
+
+        findViewById<Button>(R.id.btnSkip)?.setOnClickListener {
+            goToHome()
+        }
+
+        findViewById<Button>(R.id.btnGetStarted)?.setOnClickListener {
+            goToHome()
+        }
+    }
+
+    private fun goToHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 }

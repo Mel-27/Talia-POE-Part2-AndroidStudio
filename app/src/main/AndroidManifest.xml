@@ -16,14 +16,12 @@
 
         <!-- Splash Screen (Launch Activity) -->
         <activity
-            android:name=".ActivitySplash"
+            android:name=".SplashActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <!-- Main Dashboard -->
@@ -41,10 +39,7 @@
             android:name=".RemindersActivity"
             android:exported="false" />
 
-        <!-- Pie Chart Screen -->
-        <activity
-            android:name=".PieSlice"
-            android:exported="false" />
+
 
     </application>
 

@@ -63,25 +63,11 @@ class RemindersActivity : AppCompatActivity() {
                 notifyDaysBefore = days
                 chips.forEach { (c, _) -> c.isSelected = false }
                 chip.isSelected = true
-                refreshChipStyles(chips)
             }
         }
-        // Default: "On day" selected
         binding.chipOnDay.isSelected = true
-        refreshChipStyles(chips)
     }
 
-    private fun refreshChipStyles(chips: List<Pair<android.widget.TextView, Int>>) {
-        chips.forEach { (chip, _) ->
-            if (chip.isSelected) {
-                chip.setBackgroundResource(R.drawable.tab_active_bg)
-                chip.setTextColor(getColor(R.color.black_deep))
-            } else {
-                chip.setBackgroundResource(R.drawable.tab_row_bg)
-                chip.setTextColor(getColor(R.color.muted_text))
-            }
-        }
-    }
 
     // Date picker tied to the due-date field
     private fun setupDatePicker() {
@@ -189,13 +175,10 @@ class RemindersActivity : AppCompatActivity() {
         selectedDateMillis  = 0L
         selectedDateDisplay = ""
         notifyDaysBefore    = 0
-        binding.chipOnDay.isSelected = true
-        refreshChipStyles(listOf(
-            binding.chipOnDay  to 0,
-            binding.chip1Day   to 1,
-            binding.chip3Days  to 3,
-            binding.chip5Days  to 5
-        ))
+        binding.chipOnDay.isSelected  = true
+        binding.chip1Day.isSelected   = false
+        binding.chip3Days.isSelected  = false
+        binding.chip5Days.isSelected  = false
     }
 
     private fun setupNavigation() {
