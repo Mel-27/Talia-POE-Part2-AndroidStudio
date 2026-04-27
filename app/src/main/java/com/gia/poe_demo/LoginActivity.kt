@@ -72,7 +72,8 @@ class LoginActivity : AppCompatActivity() {
             // used lifecycleScope.launch to run the Room DB query off the main thread
             // ref: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
             lifecycleScope.launch {
-                val user = userDao.loginUser(input, password)
+                // hashing the password before comparing with the stored hash
+                val user = userDao.loginUser(input, HashUtils.md5(password))
 
                 if (user != null) {
 

@@ -142,7 +142,7 @@ class RegisterActivity : AppCompatActivity() {
                     fullName = fullName,
                     email = email,
                     username = username,
-                    password = password
+                    password = HashUtils.md5(password)
                 ))
 
                 // logging all users to Logcat to verify data is saving correctly
