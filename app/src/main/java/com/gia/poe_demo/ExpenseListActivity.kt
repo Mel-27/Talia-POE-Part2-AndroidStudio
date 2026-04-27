@@ -17,18 +17,26 @@ import kotlinx.coroutines.launch
  * ExpenseListActivity - Shows the user's full expense history.
  *
  * References:
+ * Used for onCreate() and onResume() lifecycle methods to load and refresh expenses correctly
+ * when the screen starts and returns to focus:
  * Android Developers. (2019). Understand the Activity Lifecycle  |  Android Developers. Available at:
  * https://developer.android.com/guide/components/activities/activity-lifecycle.
  * [Accessed 27 Apr. 2026]
  *
+ * Used for Intent navigation when opening ReceiptViewActivity and passing data (photoPath)
+ * between screens:
  * Android Developers. (2019). Intents and Intent Filters  |  Android Developers. Available at:
  * https://developer.android.com/guide/components/intents-filters.
  * [Accessed 27 Apr. 2026]
  *
+ * Used for implementing RecyclerView setup, adapter binding, and displaying a scrollable list
+ * of expenses:
  * GeeksforGeeks (2025). RecyclerView in Android with Example. GeeksforGeeks. Available at:
  * https://www.geeksforgeeks.org/android/android-recyclerview/.
  * [Accessed 26 Apr. 2026]
  *
+ * Used for loading data from Room database and updating RecyclerView when the expense list
+ * changes:
  * Guendouz, M. (2018). Room, LiveData, and RecyclerView. Medium. Available at:
  * https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
  * [Accessed 26 Apr. 2026]
