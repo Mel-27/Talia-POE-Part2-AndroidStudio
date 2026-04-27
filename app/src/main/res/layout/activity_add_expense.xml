@@ -68,8 +68,6 @@
                     android:textSize="32sp"
                     android:fontFamily="@font/fredoka_one" />
 
-
-
             </LinearLayout>
 
             <!-- ════════════════════════════════════════════
@@ -214,12 +212,85 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <!-- Start Time Field -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilStartTime"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            app:boxBackgroundColor="#FFFFFFFF"
+                            app:boxStrokeColor="@color/honey"
+                            app:boxStrokeWidth="2dp"
+                            app:hintTextColor="@color/muted_text"
+                            app:endIconMode="custom"
+                            app:endIconDrawable="@android:drawable/ic_menu_my_calendar"
+                            app:endIconTint="@color/honey_dark"
+                            app:boxCornerRadiusTopStart="14dp"
+                            app:boxCornerRadiusTopEnd="14dp"
+                            app:boxCornerRadiusBottomStart="14dp"
+                            app:boxCornerRadiusBottomEnd="14dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etStartTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Start Time"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:textColor="@color/black_deep"
+                                android:textColorHint="@color/muted_text"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:paddingTop="14dp"
+                                android:paddingBottom="14dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- End Time Field — FIX: removed ic_menu_clock (does not exist), use ic_menu_my_calendar instead -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilEndTime"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            app:boxBackgroundColor="#FFFFFFFF"
+                            app:boxStrokeColor="@color/honey"
+                            app:boxStrokeWidth="2dp"
+                            app:hintTextColor="@color/muted_text"
+                            app:endIconMode="none"
+                            app:boxCornerRadiusTopStart="14dp"
+                            app:boxCornerRadiusTopEnd="14dp"
+                            app:boxCornerRadiusBottomStart="14dp"
+                            app:boxCornerRadiusBottomEnd="14dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etEndTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="End Time"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:textColor="@color/black_deep"
+                                android:textColorHint="@color/muted_text"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:paddingTop="14dp"
+                                android:paddingBottom="14dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <!-- Category dropdown -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilCategory"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp">
 
                             <AutoCompleteTextView
                                 android:id="@+id/actvCategory"
@@ -266,6 +337,35 @@
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.1"
                             android:layout_marginBottom="12dp" />
+
+                        <!-- Photo Action Buttons Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <Button
+                                android:id="@+id/btnTakePhoto"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="📷 Take Photo"
+                                android:textSize="12sp"
+                                android:layout_marginEnd="8dp"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                            <Button
+                                android:id="@+id/btnChooseFromGallery"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="🖼️ Gallery"
+                                android:textSize="12sp"
+                                android:layout_marginStart="8dp"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                        </LinearLayout>
 
                         <!-- Dashed upload area -->
                         <LinearLayout
@@ -334,6 +434,18 @@
                                 android:visibility="gone" />
 
                         </LinearLayout>
+
+                        <!-- Remove photo button — shown when photo is attached -->
+                        <Button
+                            android:id="@+id/btnRemovePhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:text="✖ Remove Photo"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="@color/error_red"
+                            style="@style/Widget.MaterialComponents.Button" />
 
                     </LinearLayout>
 
