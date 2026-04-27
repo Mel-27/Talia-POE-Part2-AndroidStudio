@@ -10,7 +10,10 @@ import androidx.room.RoomDatabase
     version = 2,
     exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase() {
+// This class sets up the Room database for the app and provides access to all DAOs.
+// It also ensures only one instance of the database is used throughout the app.
+abstract class AppDatabase : RoomDatabase()
+{
 
    // abstract fun expenseDao(): ExpenseDao
     abstract fun budgetGoalDao(): BudgetGoalDao

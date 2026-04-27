@@ -3,6 +3,9 @@ package com.gia.poe_demo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
+// This data class represents a user's monthly budget goals,
+// including overall limits and category-specific spending caps.
 @Entity(tableName = "budget_goals")
 data class BudgetGoal(
     @PrimaryKey(autoGenerate = true)

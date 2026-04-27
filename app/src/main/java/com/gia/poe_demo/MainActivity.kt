@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, SplashActivity::class.java))
+        startActivity(Intent(this, activity_splash::class.java))
         finish()
     }
 }

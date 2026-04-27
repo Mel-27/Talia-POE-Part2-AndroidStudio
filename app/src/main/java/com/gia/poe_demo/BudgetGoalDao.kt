@@ -2,6 +2,9 @@ package com.gia.poe_demo
 
 import androidx.room.*
 
+
+// This DAO handles all database operations related to budget goals,
+// such as retrieving, saving, and deleting monthly goals.
 @Dao
 interface BudgetGoalDao {
 
