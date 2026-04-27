@@ -39,7 +39,10 @@
             android:name=".RemindersActivity"
             android:exported="false" />
 
-
+<!--        &lt;!&ndash; Main Dashboard &ndash;&gt;-->
+<!--        <activity-->
+<!--            android:name=".HomeActivity"-->
+<!--            android:exported="false" />-->
 
     </application>
 

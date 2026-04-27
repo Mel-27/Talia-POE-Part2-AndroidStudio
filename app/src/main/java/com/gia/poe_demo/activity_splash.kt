@@ -15,6 +15,7 @@ class SplashActivity : AppCompatActivity() {
         R.layout.onboarding_screen_4,
         R.layout.onboarding_screen_5
     )
+
     private var currentScreen = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,9 +24,18 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun showScreen(index: Int) {
+        if (index !in screens.indices) {
+            goToHome()
+            return
+        }
+
         setContentView(screens[index])
 
-        findViewById<Button>(R.id.btnNext)?.setOnClickListener {
+        val btnNext = findViewById<Button?>(R.id.btnNext)
+        val btnSkip = findViewById<Button?>(R.id.btnSkip)
+        val btnGetStarted = findViewById<Button?>(R.id.btnGetStarted)
+
+        btnNext?.setOnClickListener {
             if (currentScreen < screens.lastIndex) {
                 currentScreen++
                 showScreen(currentScreen)
@@ -34,11 +44,11 @@ class SplashActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<Button>(R.id.btnSkip)?.setOnClickListener {
+        btnSkip?.setOnClickListener {
             goToHome()
         }
 
-        findViewById<Button>(R.id.btnGetStarted)?.setOnClickListener {
+        btnGetStarted?.setOnClickListener {
             goToHome()
         }
     }
