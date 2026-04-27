@@ -1,8 +1,12 @@
+package com.gia.poe_demo
+
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 
 class AccountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,15 +15,13 @@ class AccountActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
 
-
-        val btnLight = findViewById<CardView>(R.id.btnLight)
-        val btnDark  = findViewById<TextView>(R.id.btnDark)
-
-        btnLight.setOnClickListener {
+        findViewById<CardView>(R.id.btnLight).setOnClickListener {
+            Toast.makeText(this, "Light tapped", Toast.LENGTH_SHORT).show()
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
-        btnDark.setOnClickListener {
+        findViewById<TextView>(R.id.btnDark).setOnClickListener {
+            Toast.makeText(this, "Dark tapped", Toast.LENGTH_SHORT).show()
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
