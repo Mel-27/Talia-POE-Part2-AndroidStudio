@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddExpenseActivity::class.java)
             intent.putExtra("USER_ID", userId)
             startActivity(intent)
+
+        }
+
+        findViewById<CardView>(R.id.btnAvatar).setOnClickListener {
+            startActivity(Intent(this, AccountActivity::class.java))
         }
     }
 
