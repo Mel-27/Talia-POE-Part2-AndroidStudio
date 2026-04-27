@@ -75,6 +75,13 @@ class ExpenseListActivity : AppCompatActivity() {
     // Tracks current sort order - true = newest first (default)
     private var isSortedNewest = true
 
+    // Tracks which chip is active - default is "This Month"
+    private var activeChip = "THIS_MONTH"
+
+    // Custom date range
+    private var customStartDate: String? = null
+    private var customEndDate: String?   = null
+
     // Lifecycle (Android Developers, 2019)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +95,7 @@ class ExpenseListActivity : AppCompatActivity() {
         setupRecyclerView()
         setupBottomNav()
         setupSortButtons()
+        setupChipFilters()
         loadExpenses()
     }
 
@@ -160,6 +168,58 @@ class ExpenseListActivity : AppCompatActivity() {
 
                 applyCurrentFiltersAndSort()
             }
+        }
+    }
+
+    // Chip filter setup
+
+    /**
+     * Sets up the three quick-filter chips: This Month, Last 7 Days, 3 Months.
+     * Each chip sets the active date range and refreshes the list.
+     */
+    private fun setupChipFilters() {
+        val chipThisMonth = findViewById<TextView>(R.id.chipThisMonth)
+        val chipLast7     = findViewById<TextView>(R.id.chipLast7)
+        val chip3Months   = findViewById<TextView>(R.id.chip3Months)
+
+        chipThisMonth.setOnClickListener {
+            activeChip      = "THIS_MONTH"
+            customStartDate = null
+            customEndDate   = null
+            Log.d(TAG, "Chip selected: This Month")
+            updateChipStyles(chipThisMonth, chipLast7, chip3Months)
+            applyCurrentFiltersAndSort()
+        }
+
+        chipLast7.setOnClickListener {
+            activeChip      = "LAST_7"
+            customStartDate = null
+            customEndDate   = null
+            Log.d(TAG, "Chip selected: Last 7 Days")
+            updateChipStyles(chipLast7, chipThisMonth, chip3Months)
+            applyCurrentFiltersAndSort()
+        }
+
+        chip3Months.setOnClickListener {
+            activeChip      = "3_MONTHS"
+            customStartDate = null
+            customEndDate   = null
+            Log.d(TAG, "Chip selected: 3 Months")
+            updateChipStyles(chip3Months, chipThisMonth, chipLast7)
+            applyCurrentFiltersAndSort()
+        }
+    }
+
+    /**
+     * Updates chip visual styles
+     * Active chip gets honey background, inactive chips get grey style
+     */
+    private fun updateChipStyles(active: TextView, vararg inactive: TextView) {
+        active.setBackgroundResource(R.drawable.tab_active_bg)
+        active.setTextColor(getColor(R.color.black_deep))
+        inactive.forEach { chip ->
+            chip.setBackgroundResource(R.drawable.tab_row_bg)
+            chip.setTextColor(getColor(R.color.muted_text))
         }
     }
 
