@@ -346,6 +346,9 @@
 
                                     <!-- Light — active -->
                                     <androidx.cardview.widget.CardView
+                                        android:id="@+id/btnLight"
+                                        android:clickable="true"
+                                        android:focusable="true"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         app:cardCornerRadius="50dp"
@@ -366,6 +369,9 @@
 
                                     <!-- Dark — inactive -->
                                     <TextView
+                                        android:id="@+id/btnDark"
+                                        android:clickable="true"
+                                        android:focusable="true"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:text="🌙 Dark"
