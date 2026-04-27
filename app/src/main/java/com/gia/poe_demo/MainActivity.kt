@@ -1,5 +1,5 @@
 package com.gia.poe_demo
-
+/**
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,3 +18,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+        **/

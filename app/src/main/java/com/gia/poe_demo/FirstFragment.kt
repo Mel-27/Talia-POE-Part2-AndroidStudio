@@ -1,5 +1,5 @@
 package com.gia.poe_demo
-
+/**
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,3 +42,15 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 }
+
+annotation class FragmentFirstBinding {
+    companion object {
+        fun inflate(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            bool: Boolean
+        ): FragmentFirstBinding? {
+        }
+    }
+}
+*/
