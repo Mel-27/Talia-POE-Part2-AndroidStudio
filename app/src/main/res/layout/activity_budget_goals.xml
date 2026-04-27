@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ══ CREAM TOP BAR ══ -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -52,7 +52,7 @@
                     android:fontFamily="@font/fredoka_one" />
             </LinearLayout>
 
-            <!-- ══ DARK HEADER ══ -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

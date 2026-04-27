@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Top row: icon + name + delete -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
