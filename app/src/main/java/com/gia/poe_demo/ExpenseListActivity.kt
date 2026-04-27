@@ -228,16 +228,70 @@ class ExpenseListActivity : AppCompatActivity() {
      * (StackOverflow, 2021)
      */
         private fun applyCurrentFiltersAndSort() {
-            val sorted = if (isSortedNewest) {
-                allExpenses.sortedByDescending { it.date }
-            } else {
-                allExpenses.sortedBy { it.date }
-            }
-
-            Log.d(TAG, "applyCurrentFiltersAndSort: showing ${sorted.size} expenses, newestFirst=$isSortedNewest")
-            displayExpenses(sorted)
+        // Determine date range from chip or custom dates
+        val filtered = if (customStartDate != null && customEndDate != null) {
+            // Custom date range takes priority over chips
+            filterByDateRange(allExpenses, customStartDate!!, customEndDate!!)
+        } else {
+            // Use the active chip range
+            val (start, end) = getChipDateRange(activeChip)
+            filterByDateRange(allExpenses, start, end)
         }
 
+        // Sort the filtered list
+        val sorted = if (isSortedNewest) {
+            filtered.sortedByDescending { it.date }
+        } else {
+            filtered.sortedBy { it.date }
+        }
+
+        Log.d(TAG, "applyCurrentFiltersAndSort: ${sorted.size} expenses after filter+sort")
+        displayExpenses(sorted)
+    }
+
+    /**
+     * Returns start and end date strings for the given chip key
+     */
+    private fun getChipDateRange(chip: String): Pair<String, String> {
+        val sdf   = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+        val today = java.util.Calendar.getInstance()
+        val end   = sdf.format(today.time)
+
+        val start = when (chip) {
+            "LAST_7" -> {
+                today.add(java.util.Calendar.DAY_OF_YEAR, -7)
+                sdf.format(today.time)
+            }
+            "3_MONTHS" -> {
+                today.add(java.util.Calendar.MONTH, -3)
+                sdf.format(today.time)
+            }
+            else -> {
+                // THIS_MONTH — from the 1st of the current month
+                today.set(java.util.Calendar.DAY_OF_MONTH, 1)
+                sdf.format(today.time)
+            }
+        }
+        return Pair(start, end)
+    }
+
+    /**
+     * Filters expenses to only those within the given date range (inclusive).
+     */
+    private fun filterByDateRange(
+        expenses: List<Expense>,
+        start: String,
+        end: String
+    ): List<Expense> {
+        val sdf       = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+        val startDate = sdf.parse(start) ?: return expenses
+        val endDate   = sdf.parse(end)   ?: return expenses
+
+        return expenses.filter { expense ->
+            val expenseDate = sdf.parse(expense.date)
+            expenseDate != null && !expenseDate.before(startDate) && !expenseDate.after(endDate)
+        }
+    }
 
     // Data loading
 
