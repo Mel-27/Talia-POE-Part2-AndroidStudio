@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Store front -->
+    <path
+        android:pathData="M4,8L20,8L20,20L4,20L4,8Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFC107"
+        android:fillColor="#00000000"/>
+
+    <!-- Roof -->
+    <path
+        android:pathData="M4,8L12,4L20,8"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFC107"
+        android:fillColor="#00000000"
+        android:strokeLineJoin="round"/>
+
+    <!-- Door -->
+    <path
+        android:pathData="M10,20L10,15L14,15L14,20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFC107"
+        android:fillColor="#00000000"/>
+
+    <!-- Door handle cx=12.5 cy=17.5 r=0.8 -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M12.5,16.7 A0.8,0.8 0 1,0 12.5,18.3 A0.8,0.8 0 1,0 12.5,16.7 Z"/>
+
+    <!-- Window left -->
+    <path
+        android:pathData="M6,12L9,12L9,15L6,15L6,12Z"
+        android:strokeWidth="1"
+        android:strokeColor="#FFC107"
+        android:fillColor="#00000000"/>
+
+    <!-- Window right -->
+    <path
+        android:pathData="M15,12L18,12L18,15L15,15L15,12Z"
+        android:strokeWidth="1"
+        android:strokeColor="#FFC107"
+        android:fillColor="#00000000"/>
+
+    <!-- Store name "W" -->
+    <path
+        android:pathData="M8,17L9,19L10,17L11,19L12,17"
+        android:strokeWidth="1"
+        android:strokeColor="#FFC107"
+        android:strokeLineCap="round"/>
+
+</vector>
