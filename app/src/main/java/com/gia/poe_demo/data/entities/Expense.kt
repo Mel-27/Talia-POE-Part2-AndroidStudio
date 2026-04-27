@@ -1,7 +1,7 @@
 package com.gia.poe_demo.data.entities
 
-import androidx.room3.Entity
-import androidx.room3.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * Expense entity - stores individual expense records locally in RoomDB
@@ -20,5 +20,5 @@ data class Expense(
     val startTime: String = "", // e.g. "10:30"
     val endTime: String = "", // e.g. "11:00"
     val receiptPhotoPath: String? = null, // null = no photo attached
-    val receiptUri: String? = null
+    val createdAt: Long = System.currentTimeMillis()
 )

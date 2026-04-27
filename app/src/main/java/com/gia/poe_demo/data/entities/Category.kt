@@ -1,7 +1,7 @@
 package com.gia.poe_demo.data.entities
 
-import androidx.room3.Entity
-import androidx.room3.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /*
  * Category entity - stores expense categories locally in RoomDB
@@ -14,7 +14,7 @@ data class Category(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,
-    val iconName: String = "\uD83D\uDED2", // Emoji used as the visual icon
+    val iconEmoji: String = "\uD83D\uDED2",
     val monthlyLimit: Double = 0.0, // optional spending cap
     val createdAt: Long = System.currentTimeMillis()
 )
