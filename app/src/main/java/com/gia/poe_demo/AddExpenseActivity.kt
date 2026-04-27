@@ -354,7 +354,7 @@ class AddExpenseActivity : AppCompatActivity() {
 
         val amount = amountText.toDouble()
 
-        // Combine date with start time for the expense timestamp
+        // Combined date with start time for the expense timestamp
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = selectedDateTimestamp
 

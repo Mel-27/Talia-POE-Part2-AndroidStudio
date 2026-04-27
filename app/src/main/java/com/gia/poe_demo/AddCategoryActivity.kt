@@ -18,7 +18,7 @@ import com.gia.poe_demo.db.AppDatabase
  * AddCategoryActivity - creating a new expense category.
  * Features: name input, budget limit, emoji icon picker with tabs.
  * Saves to local RoomDB via CategoryDao.
- * Reference: IIE PROG7313 Module Guide (2026)
+ * Reference: IIE PROG7313 Module Manual (2026)
  */
 
 class AddCategoryActivity : AppCompatActivity() {

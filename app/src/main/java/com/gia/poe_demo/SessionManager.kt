@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi
 /**
  * SessionManager — persists app preferences using SharedPreferences.
  * Stores dark mode toggle so the theme survives app restarts.
- * Reference: IIE PROG7313 Module Guide (2026)
+ * Reference: IIE PROG7313 Module Manual (2026)
  */
 
 class SessionManager(context: Context) {

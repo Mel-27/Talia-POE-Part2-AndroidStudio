@@ -101,8 +101,8 @@ class AccountActivity : AppCompatActivity() {
     // Bottom nav
 
     private fun setupBottomNav() {
-        // Account screen has no bottom nav by design (navigated via drawer/back)
-        // but wire any nav items if present in the layout
+        // Account screen has no bottom nav by design
+
     }
 
     private fun dp(v: Float) = v * resources.displayMetrics.density

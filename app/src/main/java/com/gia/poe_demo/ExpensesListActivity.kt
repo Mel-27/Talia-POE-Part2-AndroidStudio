@@ -37,7 +37,7 @@ import java.util.*
  *  - "+ ADD EXPENSE CATEGORY" button navigates to AddCategoryActivity
  *  - Light/dark theme applied from SessionManager
  *
- * Reference: IIE PROG7313 Module Guide (2026)
+ * Reference: IIE PROG7313 Module Manual (2026)
  */
 
 class ExpensesListActivity : AppCompatActivity() {

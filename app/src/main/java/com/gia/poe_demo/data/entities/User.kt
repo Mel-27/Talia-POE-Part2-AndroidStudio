@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 /**
  * User entity - stores account credentials locally.
  * Passwords are hashed with SHA-256 before storage.
- * Reference: IIE PROG7313 Module Guide (2026)
+ * Reference: IIE PROG7313 Module Manual (2026)
  */
 
 @Entity(tableName = "users")
