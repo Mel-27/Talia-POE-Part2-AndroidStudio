@@ -29,6 +29,11 @@ import kotlinx.coroutines.launch
  * https://developer.android.com/guide/components/intents-filters.
  * [Accessed 27 Apr. 2026]
  *
+ * Used for loading Room database data asynchronously using coroutines (lifecycleScope):
+ * David (2021). Using coroutines with Android Room database. Stack Overflow. Available at:
+ * https://stackoverflow.com/questions/68126665/using-coroutines-with-android-room-database.
+ * [Accessed 27 Apr. 2026]
+ *
  * Used for implementing RecyclerView setup, adapter binding, and displaying a scrollable list
  * of expenses:
  * GeeksforGeeks (2025). RecyclerView in Android with Example. GeeksforGeeks. Available at:
@@ -40,6 +45,12 @@ import kotlinx.coroutines.launch
  * Guendouz, M. (2018). Room, LiveData, and RecyclerView. Medium. Available at:
  * https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
  * [Accessed 26 Apr. 2026]
+ *
+ * Used for implementing toggle-based sorting logic in the RecyclerView:
+ * Singh, P. (2021). How to sort reccyclerview in kotlin android. Stack Overflow. Available at:
+ * https://stackoverflow.com/questions/67858149/how-to-sort-reccyclerview-in-kotlin-android.
+ * [Accessed 27 Apr. 2026]
+ *
  *
  */
 
@@ -61,6 +72,9 @@ class ExpenseListActivity : AppCompatActivity() {
     // The full list loaded from DB - filtering/sorting happens on this
     private var allExpenses: List<Expense> = emptyList()
 
+    // Tracks current sort order - true = newest first (default)
+    private var isSortedNewest = true
+
     // Lifecycle (Android Developers, 2019)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +87,7 @@ class ExpenseListActivity : AppCompatActivity() {
         bindViews()
         setupRecyclerView()
         setupBottomNav()
+        setupSortButtons()
         loadExpenses()
     }
 
@@ -106,12 +121,71 @@ class ExpenseListActivity : AppCompatActivity() {
         Log.d(TAG, "setupRecyclerView: RecyclerView ready")
     }
 
+    /**
+     * Sets up the Newest First / Oldest First sort toggle buttons
+     */
+    private fun setupSortButtons() {
+        val btnSortDesc = findViewById<CardView>(R.id.btnSortDesc)
+        val btnSortAsc = findViewById<CardView>(R.id.btnSortAsc)
+        val tvSortDesc = findViewById<TextView>(R.id.tvSortDesc)
+        val tvSortAsc = findViewById<TextView>(R.id.tvSortAsc)
+
+        // Newest First button clicked
+        btnSortDesc.setOnClickListener {
+            if (!isSortedNewest) {
+                isSortedNewest = true
+                Log.d(TAG, "Sort changed to: Newest First")
+
+                // Highlight Newest button, dim Oldest button
+                btnSortDesc.setCardBackgroundColor(getColor(R.color.honey))
+                btnSortAsc.setCardBackgroundColor(getColor(R.color.white))
+                tvSortDesc.setTextColor(getColor(R.color.black_deep))
+                tvSortAsc.setTextColor(getColor(R.color.muted_text))
+
+                applyCurrentFiltersAndSort()
+            }
+        }
+
+        // Oldest First button clicked
+        btnSortAsc.setOnClickListener {
+            if (isSortedNewest) {
+                isSortedNewest = false
+                Log.d(TAG, "Sort changed to: Oldest First")
+
+                // Highlight Oldest button, dim Newest button
+                btnSortAsc.setCardBackgroundColor(getColor(R.color.honey))
+                btnSortDesc.setCardBackgroundColor(getColor(R.color.white))
+                tvSortAsc.setTextColor(getColor(R.color.black_deep))
+                tvSortDesc.setTextColor(getColor(R.color.muted_text))
+
+                applyCurrentFiltersAndSort()
+            }
+        }
+    }
+
+    /**
+     * Central function that applies the current sort order to allExpenses
+     * (StackOverflow, 2021)
+     */
+        private fun applyCurrentFiltersAndSort() {
+            val sorted = if (isSortedNewest) {
+                allExpenses.sortedByDescending { it.date }
+            } else {
+                allExpenses.sortedBy { it.date }
+            }
+
+            Log.d(TAG, "applyCurrentFiltersAndSort: showing ${sorted.size} expenses, newestFirst=$isSortedNewest")
+            displayExpenses(sorted)
+        }
+
+
     // Data loading
 
     /**
-     * Loads expenses from Room DB for the logged-in user.
+     * Loads expenses from Room DB for the logged-in user
      */
     private fun loadExpenses() {
+        // (StackOverflow, 2021)
         lifecycleScope.launch {
             try {
                 // Read the logged-in user's ID from SharedPreferences
@@ -129,8 +203,7 @@ class ExpenseListActivity : AppCompatActivity() {
                 allExpenses = expenses
                 Log.d(TAG, "loadExpenses: found ${expenses.size} expenses")
 
-                // Refresh the list and stats
-                displayExpenses(allExpenses)
+                applyCurrentFiltersAndSort()
 
             } catch (e: Exception) {
                 Log.e(TAG, "loadExpenses: error — ${e.message}", e)
@@ -207,19 +280,19 @@ class ExpenseListActivity : AppCompatActivity() {
         // Add Expense (+)
         findViewById<CardView>(R.id.fabAddExpense).setOnClickListener {
             Log.d(TAG, "fabAddExpense clicked")
-            // startActivity(Intent(this, AddExpenseActivity::class.java))
+             startActivity(Intent(this, AddExpenseActivity::class.java))
         }
 
         // Goals
         findViewById<LinearLayout>(R.id.navGoals).setOnClickListener {
             Log.d(TAG, "navGoals clicked")
-            // startActivity(Intent(this, GoalsActivity::class.java))
+             startActivity(Intent(this, GoalsActivity::class.java))
         }
 
         // Badges
         findViewById<LinearLayout>(R.id.navBadges).setOnClickListener {
             Log.d(TAG, "navBadges clicked")
-            // startActivity(Intent(this, BadgesActivity::class.java))
+            startActivity(Intent(this, BadgesActivity::class.java))
         }
     }
 }
