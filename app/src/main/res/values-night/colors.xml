@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cream">#1A1A1A</color>
+    <color name="white">#2C2C2C</color>
+    <color name="black_deep">#FFFFFF</color>
+    <color name="muted_text">#AAAAAA</color>
+    <color name="input_stroke">#444444</color>
+
+
+</resources>
