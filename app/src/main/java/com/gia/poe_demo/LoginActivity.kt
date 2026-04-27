@@ -2,6 +2,7 @@ package com.gia.poe_demo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.gia.poe_demo.data.database.AppDatabase
@@ -41,15 +42,32 @@ class LoginActivity : AppCompatActivity() {
             val input = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // basic field validation before querying the database
+            // reset all errors before revalidating
+            tilUsername.error = null
+            tilPassword.error = null
+
+            var isValid = true
+
+            // username or email - required, and if it contains @ it must be a valid email format
+            // ref: https://developer.android.com/reference/android/util/Patterns#EMAIL_ADDRESS
             if (input.isEmpty()) {
                 tilUsername.error = "Required"
-                return@setOnClickListener
+                isValid = false
+            } else if (input.contains("@") && !Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
+                tilUsername.error = "Incorrect username or email"
+                isValid = false
             }
+
+            // password - required
             if (password.isEmpty()) {
                 tilPassword.error = "Required"
-                return@setOnClickListener
+                isValid = false
+            } else if (password.length < 8) {
+                tilPassword.error = "Incorrect password"
+                isValid = false
             }
+
+            if (!isValid) return@setOnClickListener
 
             // used lifecycleScope.launch to run the Room DB query off the main thread
             // ref: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
@@ -68,7 +86,8 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 } else {
-                    tilPassword.error = "Invalid username or password"
+                    // showing error on password field if credentials dont match any user in the DB
+                    tilPassword.error = "Incorrect username or password"
                 }
             }
         }
