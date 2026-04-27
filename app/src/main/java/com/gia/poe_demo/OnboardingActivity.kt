@@ -30,6 +30,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     // used findViewById() to grab the Next and Skip buttons and set click listeners on them
+    // ref: https://developer.android.com/reference/android/view/View#findViewById(int)
     // ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener)
     private fun loadScreen(screen: Int) {
         setContentView(layouts[screen]!!)
@@ -52,8 +53,41 @@ class OnboardingActivity : AppCompatActivity() {
 
     // navigates to LoginActivity using an Intent and calls finish() so the user cant go back
     // ref: https://developer.android.com/guide/components/intents-filters
+    // ref: https://developer.android.com/reference/android/app/Activity#finish()
     private fun goToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }
+
+/*
+References:
+
+Android Developers, 2024. Introduction to Activities.
+Available at: https://developer.android.com/guide/components/activities/intro-activities
+[Accessed 21 April 2026].
+
+Android Developers, 2024. The Activity Lifecycle.
+Available at: https://developer.android.com/guide/components/activities/activity-lifecycle#onCreate
+[Accessed 19 April 2026].
+
+Android Developers, 2024. AppCompatActivity.
+Available at: https://developer.android.com/reference/androidx/appcompat/app/AppCompatActivity
+[Accessed 18 April 2026].
+
+Android Developers, 2024. View - findViewById.
+Available at: https://developer.android.com/reference/android/view/View#findViewById(int)
+[Accessed 19 April 2026].
+
+Android Developers, 2024. View - setOnClickListener.
+Available at: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener)
+[Accessed 18 April 2026].
+
+Android Developers, 2024. Intents and Intent Filters.
+Available at: https://developer.android.com/guide/components/intents-filters
+[Accessed 18 April 2026].
+
+Android Developers, 2024. Activity - finish.
+Available at: https://developer.android.com/reference/android/app/Activity#finish()
+[Accessed 18 April 2026].
+*/

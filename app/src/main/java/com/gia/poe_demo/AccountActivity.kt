@@ -209,29 +209,29 @@ class AccountActivity : AppCompatActivity() {
 References:
 GeeksforGeeks, 2022. How to check if an app is in dark mode and change it to light mode in Android.
 Available at: https://www.geeksforgeeks.org/android/how-to-check-if-an-app-is-in-dark-mode-and-change-it-to-light-mode-in-android/
-[Accessed 27 April 2026].
+[Accessed 24 April 2026].
 
 Android Developers, 2024. Access data using Room DAOs.
 Available at: https://developer.android.com/training/data-storage/room/accessing-data
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 
 Android Developers, 2024. Save key-value data with SharedPreferences.
 Available at: https://developer.android.com/training/data-storage/shared-preferences
-[Accessed 27 April 2026].
+[Accessed 28 April 2026].
 
 Android Developers, 2024. Kotlin coroutines on Android.
 Available at: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
-[Accessed 27 April 2026].
+[Accessed 23 April 2026].
 
 Android Developers, 2024. Use Kotlin coroutines with lifecycle-aware components.
 Available at: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 
 Android Developers, 2024. AlertDialog.
 Available at: https://developer.android.com/guide/topics/ui/dialogs
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 
 Android Developers, 2024. Log.
 Available at: https://developer.android.com/reference/android/util/Log
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 */

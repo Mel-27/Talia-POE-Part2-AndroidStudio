@@ -119,14 +119,21 @@ References:
 
 GeeksforGeeks, 2022. Material Design Date Picker in Android using Kotlin.
 Available at: https://www.geeksforgeeks.org/kotlin/material-design-date-picker-in-android-using-kotlin/
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 
 Android Developers, 2026. Use Kotlin coroutines with lifecycle-aware components.
 Available at: https://developer.android.com/topic/libraries/architecture/coroutines
-[Accessed 27 April 2026].
+[Accessed 21 April 2026].
 
 Android Ideas (Medium), 2018. findViewById in Kotlin.
 Available at: https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
-[Accessed 27 April 2026].
+[Accessed 22 April 2026].
 
+Android Developers, 2024. MaterialDatePicker.
+Available at: https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker
+[Accessed 21 April 2026].
+
+Android Developers, 2024. SimpleDateFormat.
+Available at: https://developer.android.com/reference/java/text/SimpleDateFormat
+[Accessed 22 April 2026].
  */

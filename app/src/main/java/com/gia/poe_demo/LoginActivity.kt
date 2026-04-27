@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 isValid = false
             }
 
-            // password - required
+            // password - required and must meet minimum length
             if (password.isEmpty()) {
                 tilPassword.error = "Required"
                 isValid = false
@@ -71,11 +71,13 @@ class LoginActivity : AppCompatActivity() {
 
             if (!isValid) return@setOnClickListener
 
-            // used lifecycleScope.launch to run the Room DB query off the main thread
+            // used lifecycleScope.launch with Dispatchers.IO to run the Room DB query off the main thread
             // ref: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
+            // ref: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
             lifecycleScope.launch(Dispatchers.IO) {
 
-                // hashing the password before comparing with the stored hash
+                // hashing the password using MD5 before comparing with the stored hash
+                // ref: https://developer.android.com/reference/java/security/MessageDigest
                 val user = userDao.loginUser(input, HashUtils.md5(password))
 
                 if (user != null) {
@@ -89,13 +91,14 @@ class LoginActivity : AppCompatActivity() {
                         .apply()
 
                     // switching back to main thread to navigate
-                    // ref: https://developer.android.com/reference/android/app/Activity#finish()
+                    // ref: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
                     withContext(Dispatchers.Main) {
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         finish()
                     }
                 } else {
                     // showing error on both fields if credentials dont match any user in the DB
+                    // ref: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
                     withContext(Dispatchers.Main) {
                         tilUsername.error = "Incorrect username or password"
                         tilPassword.error = "Incorrect username or password"
@@ -111,3 +114,47 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 }
+
+/*
+References:
+
+Android Developers, 2024. Introduction to Activities.
+Available at: https://developer.android.com/guide/components/activities/intro-activities
+[Accessed 20 April 2026].
+
+Android Developers, 2024. The Activity Lifecycle.
+Available at: https://developer.android.com/guide/components/activities/activity-lifecycle#onCreate
+[Accessed 20 April 2026].
+
+Android Developers, 2024. Save data in a local database using Room.
+Available at: https://developer.android.com/training/data-storage/room
+[Accessed 21 April 2026].
+
+Android Developers, 2024. View - findViewById.
+Available at: https://developer.android.com/reference/android/view/View#findViewById(int)
+[Accessed 21 April 2026].
+
+Android Developers, 2024. Intents and Intent Filters.
+Available at: https://developer.android.com/guide/components/intents-filters
+[Accessed 22 April 2026].
+
+Android Developers, 2024. Patterns - EMAIL_ADDRESS.
+Available at: https://developer.android.com/reference/android/util/Patterns#EMAIL_ADDRESS
+[Accessed 21 April 2026].
+
+Android Developers, 2024. Use Kotlin coroutines with lifecycle-aware components.
+Available at: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
+[Accessed 21 April 2026].
+
+Android Developers, 2024. Improve app performance with Kotlin coroutines.
+Available at: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
+[Accessed 27 April 2026].
+
+Android Developers, 2024. Save key-value data with SharedPreferences.
+Available at: https://developer.android.com/training/data-storage/shared-preferences
+[Accessed 27 April 2026].
+
+Android Developers, 2024. MessageDigest.
+Available at: https://developer.android.com/reference/java/security/MessageDigest
+[Accessed 27 April 2026].
+*/
