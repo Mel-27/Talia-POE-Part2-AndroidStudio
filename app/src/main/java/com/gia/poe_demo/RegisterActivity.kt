@@ -2,6 +2,7 @@ package com.gia.poe_demo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.gia.poe_demo.data.database.AppDatabase
@@ -32,10 +33,11 @@ class RegisterActivity : AppCompatActivity() {
         val etUsername = findViewById<TextInputEditText>(R.id.etUsername)
         val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
         val etConfirmPassword = findViewById<TextInputEditText>(R.id.etConfirmPassword)
+        val tilFullName = findViewById<TextInputLayout>(R.id.tilFullName)
+        val tilEmail = findViewById<TextInputLayout>(R.id.tilEmail)
+        val tilUsername = findViewById<TextInputLayout>(R.id.tilUsername)
         val tilPassword = findViewById<TextInputLayout>(R.id.tilPassword)
         val tilConfirmPassword = findViewById<TextInputLayout>(R.id.tilConfirmPassword)
-        val tilUsername = findViewById<TextInputLayout>(R.id.tilUsername)
-        val tilEmail = findViewById<TextInputLayout>(R.id.tilEmail)
 
         // tab click navigates to LoginActivity using an explicit Intent and calls finish()
         // ref: https://developer.android.com/guide/components/intents-filters
@@ -45,27 +47,77 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         findViewById<android.view.View>(R.id.btnRegister).setOnClickListener {
+
             val fullName = etFullName.text.toString().trim()
             val email = etEmail.text.toString().trim()
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            // basic field validation before doing anything with the database
-            if (fullName.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty()) {
-                if (fullName.isEmpty()) findViewById<TextInputLayout>(R.id.tilFullName).error = "Required"
-                if (email.isEmpty()) tilEmail.error = "Required"
-                if (username.isEmpty()) tilUsername.error = "Required"
-                if (password.isEmpty()) tilPassword.error = "Required"
-                return@setOnClickListener
+            // reset all errors before revalidating
+            tilFullName.error = null
+            tilEmail.error = null
+            tilUsername.error = null
+            tilPassword.error = null
+            tilConfirmPassword.error = null
+
+            var isValid = true
+
+            // full name — letters and spaces only, no numbers or special characters
+            if (fullName.isEmpty()) {
+                tilFullName.error = "Required"
+                isValid = false
+            } else if (!fullName.matches(Regex("^[a-zA-Z ]+$"))) {
+                tilFullName.error = "Full name must contain letters only"
+                isValid = false
             }
 
-            // checking that both password fields match before registering
-            if (password != confirmPassword) {
+            // email — must be a valid email format using Android's built-in Patterns class
+            // ref: https://developer.android.com/reference/android/util/Patterns#EMAIL_ADDRESS
+            if (email.isEmpty()) {
+                tilEmail.error = "Required"
+                isValid = false
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                tilEmail.error = "Enter a valid email address"
+                isValid = false
+            }
+
+            // username — just required, no format restrictions
+            if (username.isEmpty()) {
+                tilUsername.error = "Required"
+                isValid = false
+            }
+
+            // password strength validation - min 8 chars, uppercase, number, special character
+            if (password.isEmpty()) {
+                tilPassword.error = "Required"
+                isValid = false
+            } else if (password.length < 8) {
+                tilPassword.error = "Password must be at least 8 characters"
+                isValid = false
+            } else if (!password.any { it.isUpperCase() }) {
+                tilPassword.error = "Password must contain at least one uppercase letter"
+                isValid = false
+            } else if (!password.any { it.isDigit() }) {
+                tilPassword.error = "Password must contain at least one number"
+                isValid = false
+            } else if (!password.any { !it.isLetterOrDigit() }) {
+                tilPassword.error = "Password must contain at least one special character"
+                isValid = false
+            }
+
+            // confirm password - must match password field
+            if (confirmPassword.isEmpty()) {
+                tilConfirmPassword.error = "Required"
+                isValid = false
+            } else if (password != confirmPassword) {
                 tilConfirmPassword.error = "Passwords do not match"
-                return@setOnClickListener
+                isValid = false
             }
 
+            if (!isValid) return@setOnClickListener
+
+            // all validation passed - proceed with database operations
             // used lifecycleScope.launch to run all Room DB operations off the main thread
             // ref: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
             lifecycleScope.launch {
