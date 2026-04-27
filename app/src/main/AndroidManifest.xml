@@ -37,6 +37,10 @@
             android:name=".AccountActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".BadgesActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
