@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.gia.poe_demo.data.database.AppDatabase
+import com.gia.poe_demo.data.entity.Expense
 
 //Activity responsible for adding a new expense entry.
 class AddExpenseActivity : AppCompatActivity() {
@@ -97,8 +99,8 @@ class AddExpenseActivity : AppCompatActivity() {
                     Expense(
                         userId = userId,
                         description = description,
-                        amount      = amount.toDouble(),
-                        date        = date
+                        amount = amount.toDouble(),
+                        date = date
                     )
                 )
                 // Notify user of success

@@ -8,7 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.gia.poe_demo.data.database.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // extended AppCompatActivity which is just the standard way Android activities work
 // ref: https://developer.android.com/guide/components/activities/intro-activities
@@ -71,7 +73,8 @@ class LoginActivity : AppCompatActivity() {
 
             // used lifecycleScope.launch to run the Room DB query off the main thread
             // ref: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
+
                 // hashing the password before comparing with the stored hash
                 val user = userDao.loginUser(input, HashUtils.md5(password))
 
@@ -80,15 +83,23 @@ class LoginActivity : AppCompatActivity() {
                     // saving login state to SharedPreferences so the app remembers the user
                     // ref: https://developer.android.com/training/data-storage/shared-preferences
                     val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
-                    prefs.edit().putBoolean("isRegistered", true).apply()
+                    prefs.edit()
+                        .putBoolean("isRegistered", true)
+                        .putString("loggedInUsername", user.username)
+                        .apply()
 
-                    // navigating to MainActivity and calling finish() so the user cant go back to login
+                    // switching back to main thread to navigate
                     // ref: https://developer.android.com/reference/android/app/Activity#finish()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish()
+                    withContext(Dispatchers.Main) {
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
                 } else {
-                    // showing error on password field if credentials dont match any user in the DB
-                    tilPassword.error = "Incorrect username or password"
+                    // showing error on both fields if credentials dont match any user in the DB
+                    withContext(Dispatchers.Main) {
+                        tilUsername.error = "Incorrect username or password"
+                        tilPassword.error = "Incorrect username or password"
+                    }
                 }
             }
         }

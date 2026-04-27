@@ -1,8 +1,10 @@
-package com.gia.poe_demo
+package com.gia.poe_demo.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.gia.poe_demo.data.entity.Expense
+
 @Dao
 interface ExpenseDao {
     @Insert

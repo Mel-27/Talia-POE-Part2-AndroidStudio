@@ -153,7 +153,10 @@ class RegisterActivity : AppCompatActivity() {
                 // saving registration state to SharedPreferences so the app remembers the user
                 // ref: https://developer.android.com/training/data-storage/shared-preferences
                 val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
-                prefs.edit().putBoolean("isRegistered", true).apply()
+                prefs.edit()
+                    .putBoolean("isRegistered", true)
+                    .putString("loggedInUsername", username)
+                    .apply()
 
                 // navigating to MainActivity and calling finish() so the user cant go back to register
                 // ref: https://developer.android.com/reference/android/app/Activity#finish()

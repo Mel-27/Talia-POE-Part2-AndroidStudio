@@ -1,8 +1,10 @@
 package com.gia.poe_demo.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.gia.poe_demo.data.entity.User
 
 // @Dao marks this interface as a Room Database Access Object
@@ -36,4 +38,14 @@ interface UserDao {
     // ref: https://developer.android.com/training/data-storage/room/accessing-data#query
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
+
+    // @Update tells Room to handle the SQL update automatically using the primary key
+    // ref: https://developer.android.com/training/data-storage/room/accessing-data#update
+    @Update
+    suspend fun updateUser(user: User)
+
+    // @Delete tells Room to handle the SQL delete automatically using the primary key
+    // ref: https://developer.android.com/training/data-storage/room/accessing-data#delete
+    @Delete
+    suspend fun deleteUser(user: User)
 }

@@ -1,4 +1,4 @@
-package com.gia.poe_demo
+package com.gia.poe_demo.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
