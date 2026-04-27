@@ -16,6 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
  * GeeksforGeeks (2025). RecyclerView in Android with Example. GeeksforGeeks. Available at:
  * https://www.geeksforgeeks.org/android/android-recyclerview/.
  * [Accessed 26 Apr.  2026]
+ *
+ * Guendouz, M. (2018). Room, LiveData, and RecyclerView. Medium. Available at:
+ * https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
+ * [Accessed 26 Apr. 2026]
+ *
  */
 
 class ExpenseAdapter(
@@ -75,7 +80,7 @@ class ExpenseAdapter(
 
     /**
      * Replaces the current list and refreshes the RecyclerView.
-     * Called every time a filter or sort changes.
+     * Called every time a filter or sort changes. (Medium, 2018)
      */
     fun updateList(newExpenses: List<Expense>) {
         expenses = newExpenses
