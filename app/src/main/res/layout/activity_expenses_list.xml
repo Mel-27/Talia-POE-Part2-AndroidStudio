@@ -8,6 +8,7 @@
     [Accessed 26 Apr. 2026]
 -->
 
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -266,7 +267,7 @@
 
                 </HorizontalScrollView>
 
-                <!-- Date Range Row  -->
+                <!-- Date Range Row -->
                 <LinearLayout
                     android:id="@+id/dateRangeRow"
                     android:layout_width="match_parent"
@@ -274,6 +275,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:layout_marginBottom="12dp">
+
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnStartDate"
@@ -406,7 +408,7 @@
 
                 </LinearLayout>
 
-                <!-- RecyclerView used to display and group expense items by date(GeeksforGeeks, 2025) -->
+                <!-- RecyclerView replaces all hardcoded expense cards (GeeksforGeeks, 2025) -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExpenses"
                     android:layout_width="match_parent"
@@ -414,14 +416,54 @@
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false" />
 
+                <!-- Empty state shown when no expenses exist for the selected period -->
+                <LinearLayout
+                    android:id="@+id/layoutEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="48dp"
+                    android:paddingBottom="48dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🍯"
+                        android:textSize="48sp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No expenses found"
+                        android:textColor="@color/black_deep"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Try a different date range"
+                        android:textColor="@color/muted_text"
+                        android:textSize="13sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
     </ScrollView>
 
-    <!-- BOTTOM NAVIGATION BAR-->
+    <!-- BOTTOM NAVIGATION BAR -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
