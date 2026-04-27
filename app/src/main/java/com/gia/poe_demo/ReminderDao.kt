@@ -3,6 +3,8 @@ package com.gia.poe_demo
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
+// This DAO manages reminder-related database actions,
+// including adding, deleting, and fetching upcoming reminders.
 @Dao
 interface ReminderDao {
 

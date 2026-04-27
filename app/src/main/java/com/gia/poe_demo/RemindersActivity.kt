@@ -17,8 +17,10 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import com.google.android.material.chip.Chip
 
+
+// This activity handles the reminders feature,
+// allowing users to create, view, and delete payment reminders.
 class RemindersActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRemindersBinding

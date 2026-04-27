@@ -3,6 +3,8 @@ package com.gia.poe_demo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// This data class represents a payment or bill reminder,
+// including the amount, due date, and notification settings.
 @Entity(tableName = "reminders")
 data class Reminder(
     @PrimaryKey(autoGenerate = true)

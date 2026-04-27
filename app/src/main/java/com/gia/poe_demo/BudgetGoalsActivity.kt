@@ -12,6 +12,8 @@ import java.text.NumberFormat
 import java.util.Calendar
 import java.util.Locale
 
+// This activity manages the budget goals screen,
+// allowing users to view, update, and track their monthly spending limits.
 class BudgetGoalsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBudgetGoalsBinding
@@ -46,7 +48,7 @@ class BudgetGoalsActivity : AppCompatActivity() {
         setupNavigation()
     }
 
-    // ── Load saved goals from Room and populate the UI ──────────────────────
+    // Load saved goals from Room and populate the UI
     private fun loadGoalsForCurrentMonth() {
         lifecycleScope.launch {
             val goal = withContext(Dispatchers.IO) {
@@ -87,11 +89,11 @@ class BudgetGoalsActivity : AppCompatActivity() {
         // Monthly budget edit field
         binding.etMonthlyBudget.setText(goal.totalMonthlyBudget.toInt().toString())
 
-        // ── Min / Max goal fields ──
+        //  Min / Max goal fields
         binding.etMinGoal.setText(goal.minMonthlyGoal.toInt().toString())
         binding.etMaxGoal.setText(goal.maxMonthlyGoal.toInt().toString())
 
-        // ── Bar chart heights (max bar = 130 dp, scaled to highest spend) ──
+        //  Bar chart heights (max bar = 130 dp, scaled to highest spend)
         val maxSpend = spending.values.maxOrNull() ?: 1.0
         fun barDp(category: String): Int =
             ((spending[category]!! / maxSpend) * 130).toInt().coerceAtLeast(8)
@@ -102,7 +104,7 @@ class BudgetGoalsActivity : AppCompatActivity() {
         setBarHeight(binding.barFood,          barDp("food"))
         setBarHeight(binding.barHealth,        barDp("health"))
 
-        // ── Category cards ──
+        // Category cards
         renderCategory(
             spent      = spending["groceries"]!!,
             limit      = goal.groceriesLimit,
@@ -171,7 +173,7 @@ class BudgetGoalsActivity : AppCompatActivity() {
         view.layoutParams = params
     }
 
-    // ── Wire up every Update button to save changes to Room ────────────────
+    // Wire up every Update button to save changes to Room
     private fun setupUpdateButtons() {
 
         // Monthly budget + min/max goals
@@ -253,7 +255,7 @@ class BudgetGoalsActivity : AppCompatActivity() {
         }
     }
 
-    // ── Bottom nav ──────────────────────────────────────────────────────────
+    // Bottom nav
     private fun setupNavigation() {
         binding.navHome.setOnClickListener { finish() }
         binding.navExpenses.setOnClickListener {
@@ -268,7 +270,7 @@ class BudgetGoalsActivity : AppCompatActivity() {
         }
     }
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
+
     private fun fmt(value: Double): String = currencyFormat.format(value)
     private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
