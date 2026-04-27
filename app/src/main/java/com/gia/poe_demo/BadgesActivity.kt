@@ -12,7 +12,19 @@ import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
+/*
+BadgesActivity — Displays the Hive Rewards gamification screen.
+ Features:
 
+ *   - Shows current Honey Points for the logged-in user
+ *   - Progress bar toward next badge
+ *   - Badge gallery (earned = full colour, locked = greyed out)
+ *   - How to Earn Points section (static display)
+ *   - Bottom navigation
+
+ * Points are stored in the honey_points table via HoneyPointsDao.
+ * Points are awarded by other screens (e.g. AddExpenseActivity awards +5).
+ */
 class BadgesActivity : AppCompatActivity() {
 
     private val TAG = "BadgesActivity"
@@ -27,15 +39,23 @@ class BadgesActivity : AppCompatActivity() {
         loadAndDisplayPoints()
     }
 
-
+    // Refresh points every time screen comes into focus
+    // (handles returning after an expense was added)
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: refreshing points")
         loadAndDisplayPoints()
     }
 
+    /**
+     * Reads the logged-in userId from SharedPreferences,
+     * fetches their HoneyPoints from the DB, then updates all UI elements.
+     * Adapted from (Android Developers,2026 - Save data using SharedPreferences.)
+     * Adapted from (Android Developers,2026 -Use Kotlin coroutines with lifecycle-aware components.)
+     */
 
     private fun loadAndDisplayPoints() {
+
         lifecycleScope.launch {
             try {
                 val prefs  = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
@@ -44,7 +64,7 @@ class BadgesActivity : AppCompatActivity() {
 
                 val db = AppDatabase.getInstance(this@BadgesActivity)
 
-
+                // If no record exists yet, create one with 0 points
                 var honeyData = db.honeyPointsDao().getPointsForUser(userId)
                 if (honeyData == null) {
                     Log.d(TAG, "No points record found — creating new one")
@@ -55,7 +75,7 @@ class BadgesActivity : AppCompatActivity() {
                 val points = honeyData.points
                 Log.d(TAG, "User has $points Honey Points")
 
-
+                // Update all UI on main thread
                 updatePointsDisplay(points)
                 updateProgressBar(points)
                 updateBadgeGallery(points)
@@ -65,15 +85,23 @@ class BadgesActivity : AppCompatActivity() {
             }
         }
     }
-
+    /**
+     * Updates the large points number and the subtitle label
+     * Adapted from (Medium , 2019 - Logging in Kotlin— the right way.)
+     */
     private fun updatePointsDisplay(points: Int) {
         findViewById<TextView>(R.id.tvHoneyPoints).text = "$points 🍯"
 
         val nextLabel = GamificationManager.getNextBadgeLabel(points)
-
+        // Find the subtitle TextView
+        // that says "50 pts to Honey Collector" in the XML
+        // It doesn't have an ID in the XML so we'll use the progress label instead
         Log.d(TAG, "Next badge label: $nextLabel")
     }
-
+    /**
+     * Updates the progress bar and the "200 / 250 pts" label.
+     * Adapted from (Android Developers, 2026 -  ProgressBar.)
+     */
     private fun updateProgressBar(points: Int) {
         val (current, target) = GamificationManager.getProgressToNextBadge(points)
         val progressBar = findViewById<ProgressBar>(R.id.progressNextBadge)
@@ -83,12 +111,23 @@ class BadgesActivity : AppCompatActivity() {
         Log.d(TAG, "Progress: $current / $target")
     }
 
-
+    /**
+     * Updates each badge card to show earned (full opacity, green tick)
+     * or locked (greyed out, lock icon) based on current points.
+     *
+     * The four badge cards in the XML correspond to:
+     *   badge1 = Worker Bee    (100 pts)
+     *   badge2 = Honey Collector (250 pts)
+     *   badge3 = Honey Hoarder  (500 pts)
+     *   badge4 = Queen Bee     (1000 pts)
+     */
     private fun updateBadgeGallery(points: Int) {
         val earnedBadges = GamificationManager.getEarnedBadges(points)
         val earnedNames  = earnedBadges.map { it.name }.toSet()
 
-
+        // Map each badge name to its card's parent CardView and status TextView
+        // We find them by their position in the XML — each badge card contains
+        // a TextView at the top that says either "Earned" or "Locked"
         updateSingleBadge(
             cardId     = R.id.cardBadge1,
             badgeName  = "Worker Bee",
@@ -113,6 +152,11 @@ class BadgesActivity : AppCompatActivity() {
         Log.d(TAG, "Earned badges: $earnedNames")
     }
 
+    /**
+     * Updates a single badge card's appearance based on whether it's earned.
+     * Earned = full opacity, green "Earned" label
+     * Locked = 0.45 alpha, grey "Locked" label
+     */
 
     private fun updateSingleBadge(
         cardId: Int,
@@ -124,12 +168,12 @@ class BadgesActivity : AppCompatActivity() {
 
         if (isEarned) {
             card.alpha = 1.0f
-            // Find the status TextView inside this card (first TextView child)
+            // Find the status TextView inside this card
             val statusTv = card.findViewWithTag<TextView>("tvBadgeStatus_$badgeName")
                 ?: card.getChildAt(0)?.let {
                     (it as? android.widget.LinearLayout)?.getChildAt(0) as? TextView
                 }
-            statusTv?.text      = "✓ Earned"
+            statusTv?.text      = "✅ Earned"
             statusTv?.setTextColor(getColor(R.color.success_green))
         } else {
             card.alpha = 0.45f
@@ -143,7 +187,8 @@ class BadgesActivity : AppCompatActivity() {
     }
 
 
-
+//Bottom nav
+    //Adapted from (Medium, 2018 - findViewById in Kotlin,Stack Overflow ,2017 - Log.e with Kotlin.)
     private fun setupBottomNav() {
         findViewById<LinearLayout>(R.id.navHome).setOnClickListener {
             Log.d(TAG, "navHome clicked")
@@ -152,7 +197,7 @@ class BadgesActivity : AppCompatActivity() {
 
         findViewById<LinearLayout>(R.id.navExpenses).setOnClickListener {
             Log.d(TAG, "navExpenses clicked")
-            startActivity(Intent(this, ExpenseListActivity::class.java))
+            //startActivity(Intent(this, ExpenseListActivity::class.java))
         }
 
         findViewById<CardView>(R.id.fabAddExpense).setOnClickListener {
@@ -161,6 +206,8 @@ class BadgesActivity : AppCompatActivity() {
         }
 
         findViewById<LinearLayout>(R.id.navGoals).setOnClickListener {
+            Log.d(TAG, "navGoals clicked")
+            //startActivity(Intent(this, GoalsActivity::class.java))
 
         }
 
@@ -170,3 +217,36 @@ class BadgesActivity : AppCompatActivity() {
         }
     }
 }
+/*
+References:
+
+Android Developers, 2026. Use Kotlin coroutines with lifecycle-aware components.
+Available at: https://developer.android.com/topic/libraries/architecture/coroutines
+[Accessed 27 April 2026].
+
+Android Ideas (Medium), 2018. findViewById in Kotlin.
+Available at: https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
+[Accessed 27 April 2026].
+
+Android Developers, 2026. Save data using SharedPreferences.
+Available at: https://developer.android.com/training/data-storage/shared-preferences
+[Accessed 27 April 2026].
+
+Android Developers, 2026. ProgressBar.
+Available at: https://developer.android.com/reference/android/widget/ProgressBar
+[Accessed 27 April 2026].
+
+Android Ideas (Medium), 2018. findViewById in Kotlin.
+Available at: https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
+[Accessed 27 April 2026].
+
+ Medium. (2019). Logging in Kotlin— the right way.
+ Available at: https://muthuraj57.medium.com/logging-in-kotlin-the-right-way-d7a357bb0343
+ [Accessed 27 Apr. 2026].
+
+ Stack Overflow .(2017). Log.e with Kotlin.  .
+ Available at: https://stackoverflow.com/questions/44158802/log-e-with-kotlin.
+[Accessed 27 April 2026].
+
+
+ */

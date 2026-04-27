@@ -11,3 +11,11 @@ interface ExpenseDao {
    @Query("SELECT * FROM expenses WHERE userId = :userId ORDER BY id DESC")
     suspend fun getExpensesByUser(userId: Int): List<Expense>
 }
+
+/*
+References:
+Android Developers. (2019). Accessing data using Room DAOs  |
+Android Developers. [online]
+Available at: https://developer.android.com/training/data-storage/room/accessing-data.
+
+ */

@@ -24,6 +24,7 @@ class AddExpenseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_expense)
 
         //Link UI components to variables using findViewById
+        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
         val etDescription  = findViewById<TextInputEditText>(R.id.etDescription)
         val etAmount       = findViewById<TextInputEditText>(R.id.etAmount)
         val etDate         = findViewById<TextInputEditText>(R.id.etDate)
@@ -37,7 +38,7 @@ class AddExpenseActivity : AppCompatActivity() {
         val db             = AppDatabase.getInstance(this)
 
         // Create a Material Date Picker instance
-        //Adapted from (GeekforGeeks, 2022)
+        //Adapted from (GeekforGeeks, 2022 - Material Design Date Picker in Android using Kotlin)
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")//Title shown on picker dialog
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) //Default day = today
@@ -59,15 +60,15 @@ class AddExpenseActivity : AppCompatActivity() {
         }
 
         //Back button - closes activity
-        //Adapted from (Medium, 2018)
+        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
         findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
 
         //Cancel button - also closes activity
-        //Adapted from (Medium, 2018)
+        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
         findViewById<MaterialButton>(R.id.btnCancel).setOnClickListener { finish() }
 
         //Save button logic
-        //Adapted from (Medium, 2018)
+        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
         findViewById<MaterialButton>(R.id.btnSaveExpense).setOnClickListener {
 
             //Get user input values
@@ -87,7 +88,7 @@ class AddExpenseActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             // Launch coroutine to perform database operation off the main thread
-            //Adapted from (Android Developers , 2026)
+            //Adapted from (Android Developers , 2026 - Use Kotlin coroutines with lifecycle-aware components)
             lifecycleScope.launch {
 
                 // Retrieve stored date value or fallback to current time
