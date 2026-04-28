@@ -3,14 +3,12 @@ package com.gia.poe_demo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 
 //Main screen of the application- acts as a navigation hub
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         //Set the layout for the main screen
         setContentView(R.layout.activity_main)
@@ -39,11 +37,6 @@ class MainActivity : AppCompatActivity() {
             // Navigate to account/settings screen
             startActivity(Intent(this, AccountActivity::class.java))
         }
-          //Navigate to badges screen
-        findViewById<LinearLayout>(R.id.navBadges).setOnClickListener {
-            startActivity(Intent(this, BadgesActivity::class.java))
-        }
-
     }
 
 

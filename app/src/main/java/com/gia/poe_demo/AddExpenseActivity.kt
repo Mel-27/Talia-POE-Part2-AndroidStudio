@@ -1,7 +1,6 @@
 package com.gia.poe_demo
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +23,6 @@ class AddExpenseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_expense)
 
         //Link UI components to variables using findViewById
-        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
         val etDescription  = findViewById<TextInputEditText>(R.id.etDescription)
         val etAmount       = findViewById<TextInputEditText>(R.id.etAmount)
         val etDate         = findViewById<TextInputEditText>(R.id.etDate)
@@ -38,7 +36,7 @@ class AddExpenseActivity : AppCompatActivity() {
         val db             = AppDatabase.getInstance(this)
 
         // Create a Material Date Picker instance
-        //Adapted from (GeekforGeeks, 2022 - Material Design Date Picker in Android using Kotlin)
+        //Adapted from (GeekforGeeks, 2022)
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")//Title shown on picker dialog
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) //Default day = today
@@ -60,15 +58,15 @@ class AddExpenseActivity : AppCompatActivity() {
         }
 
         //Back button - closes activity
-        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
+        //Adapted from (Medium, 2018)
         findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
 
         //Cancel button - also closes activity
-        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
+        //Adapted from (Medium, 2018)
         findViewById<MaterialButton>(R.id.btnCancel).setOnClickListener { finish() }
 
         //Save button logic
-        //Adapted from (Medium, 2018 - findViewById in Kotlin.)
+        //Adapted from (Medium, 2018)
         findViewById<MaterialButton>(R.id.btnSaveExpense).setOnClickListener {
 
             //Get user input values
@@ -88,7 +86,7 @@ class AddExpenseActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             // Launch coroutine to perform database operation off the main thread
-            //Adapted from (Android Developers , 2026 - Use Kotlin coroutines with lifecycle-aware components)
+            //Adapted from (Android Developers , 2026)
             lifecycleScope.launch {
 
                 // Retrieve stored date value or fallback to current time
@@ -103,19 +101,6 @@ class AddExpenseActivity : AppCompatActivity() {
                         date        = date
                     )
                 )
-
-
-                val prefs  = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
-                val userId = prefs.getInt("loggedInUserId", -1)
-                if (userId != -1) {
-                    val existing = db.honeyPointsDao().getPointsForUser(userId)
-                    if (existing == null) {
-                        db.honeyPointsDao().upsert(HoneyPoints(userId = userId, points = 5))
-                    } else {
-                        db.honeyPointsDao().addPoints(userId, GamificationManager.POINTS_ADD_EXPENSE)
-                    }
-                    Log.d("AddExpense", "Awarded ${GamificationManager.POINTS_ADD_EXPENSE} Honey Points to userId=$userId")
-                }
                 // Notify user of success
                 Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
                 // Close activity after saving

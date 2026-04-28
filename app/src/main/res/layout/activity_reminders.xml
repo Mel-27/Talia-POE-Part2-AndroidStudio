@@ -52,6 +52,8 @@
                     android:textSize="32sp"
                     android:fontFamily="@font/fredoka_one" />
 
+
+
             </LinearLayout>
 
             <!-- BODY -->
@@ -114,6 +116,8 @@
                                     android:textColor="@color/black_deep"
                                     android:textSize="16sp"
                                     android:fontFamily="@font/fredoka_one" />
+
+
 
                             </LinearLayout>
 
@@ -467,13 +471,11 @@
 
                             </LinearLayout>
 
-                            <!-- FIX: replaced android:colorFilter with app:tint -->
                             <ImageView
                                 android:id="@+id/btnDeleteReminder1"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/trash"
-                                app:tint="#FF4545"
                                 android:background="@android:color/transparent"
                                 android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
@@ -591,20 +593,16 @@
                                     android:layout_marginTop="2dp" />
 
                             </LinearLayout>
-
-                            <!-- FIX: replaced android:colorFilter with app:tint -->
                             <ImageView
                                 android:id="@+id/btnDeleteReminder2"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/trash"
-                                app:tint="#FF4545"
                                 android:background="@android:color/transparent"
                                 android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:contentDescription="Delete reminder" />
-
                         </LinearLayout>
 
                         <View

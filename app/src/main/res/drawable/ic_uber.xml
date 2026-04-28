@@ -5,12 +5,14 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
-    <!-- Circle background cx=12 cy=12 r=8 -->
-    <path
+    <!-- Circle background (Uber's style) -->
+    <circle
+        android:cx="12"
+        android:cy="12"
+        android:r="8"
         android:strokeWidth="1.5"
         android:strokeColor="#FFC107"
-        android:fillColor="#00000000"
-        android:pathData="M12,4 A8,8 0 1,0 12,20 A8,8 0 1,0 12,4 Z"/>
+        android:fillColor="#00000000"/>
 
     <!-- Letter U -->
     <path
@@ -19,5 +21,4 @@
         android:strokeColor="#FFC107"
         android:fillColor="#00000000"
         android:strokeLineCap="round"/>
-
 </vector>

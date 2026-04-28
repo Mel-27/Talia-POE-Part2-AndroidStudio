@@ -21,7 +21,7 @@ class AccountActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
 
         // Light mode button - switches app theme to light mode
-        //Adapted from (GeekforGeeks, 2022-  How to check if an app is in dark mode and change it to light mode in Android)
+        //Adapted from (GeekforGeeks, 2022)
         findViewById<CardView>(R.id.btnLight).setOnClickListener {
 
             // Display feedback to user
@@ -44,7 +44,6 @@ class AccountActivity : AppCompatActivity() {
 }
 /*
 References:
-
 GeeksforGeeks, 2022. How to check if an app is in dark mode and change it to light mode in Android.
 Available at: https://www.geeksforgeeks.org/android/how-to-check-if-an-app-is-in-dark-mode-and-change-it-to-light-mode-in-android/
 [Accessed 27 April 2026].

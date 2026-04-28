@@ -5,10 +5,12 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
-    <!-- Bee body (yellow circle) cx=12 cy=12 r=8 -->
-    <path
-        android:fillColor="#FFC107"
-        android:pathData="M12,4 A8,8 0 1,0 12,20 A8,8 0 1,0 12,4 Z"/>
+    <!-- Bee body (yellow circle) -->
+    <circle
+        android:cx="12"
+        android:cy="12"
+        android:r="8"
+        android:fillColor="#FFC107"/>
 
     <!-- Bee stripes (black) -->
     <path
@@ -39,12 +41,15 @@
         android:strokeWidth="1"
         android:strokeColor="#E0E0E0"/>
 
-    <!-- Eyes cx=9 cy=10 r=1 and cx=15 cy=10 r=1 -->
-    <path
-        android:fillColor="#000000"
-        android:pathData="M9,9 A1,1 0 1,0 9,11 A1,1 0 1,0 9,9 Z"/>
-    <path
-        android:fillColor="#000000"
-        android:pathData="M15,9 A1,1 0 1,0 15,11 A1,1 0 1,0 15,9 Z"/>
-
+    <!-- Eyes -->
+    <circle
+        android:cx="9"
+        android:cy="10"
+        android:r="1"
+        android:fillColor="#000000"/>
+    <circle
+        android:cx="15"
+        android:cy="10"
+        android:r="1"
+        android:fillColor="#000000"/>
 </vector>
