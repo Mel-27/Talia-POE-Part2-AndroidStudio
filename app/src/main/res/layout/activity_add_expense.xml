@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- CoordinatorLayout used as the root layout to support scrolling behaviour
+     ref: https://developer.android.com/reference/androidx/coordinatorlayout/widget/CoordinatorLayout -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream" >
+    android:background="@color/cream">
 
+    <!-- ScrollView so the whole screen scrolls if content overflows
+         ref: https://developer.android.com/reference/android/widget/ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,9 +22,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ════════════════════════════════════════════
-                 PAGE HEADER
-            ════════════════════════════════════════════ -->
+            <!-- page header with back button and title
+                 ref: https://developer.android.com/guide/topics/ui/layout/linear -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,6 +34,8 @@
                 android:paddingBottom="18dp"
                 android:background="@color/cream">
 
+                <!-- back button using a TextView with a click listener wired in the activity
+                     ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener) -->
                 <TextView
                     android:id="@+id/tvBack"
                     android:layout_width="wrap_content"
@@ -56,13 +61,10 @@
                     android:textSize="32sp"
                     android:fontFamily="@font/fredoka_one" />
 
-
-
             </LinearLayout>
 
-            <!-- ════════════════════════════════════════════
-                 BODY
-            ════════════════════════════════════════════ -->
+            <!-- body section with expense form fields and action buttons
+                 ref: https://developer.android.com/guide/topics/ui/layout/linear -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +73,8 @@
                 android:paddingEnd="18dp"
                 android:paddingBottom="40dp">
 
-                <!-- ── EXPENSE DETAILS CARD ───────────────────── -->
+                <!-- CardView wrapping the expense detail input fields
+                     ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +100,8 @@
                             android:letterSpacing="0.1"
                             android:layout_marginBottom="14dp" />
 
-                        <!-- Description -->
+                        <!-- TextInputLayout with OutlinedBox style for the description field
+                             ref: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilDescription"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -130,7 +134,8 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Amount -->
+                        <!-- TextInputLayout for the amount field with a prefix of R for Rands
+                             ref: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilAmount"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -165,7 +170,8 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Date — tapping opens MaterialDatePicker -->
+                        <!-- date field is non-editable, tapping opens MaterialDatePicker in the activity
+                             ref: https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilDate"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -202,7 +208,8 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Category dropdown -->
+                        <!-- category dropdown using ExposedDropdownMenu style and AutoCompleteTextView
+                             ref: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilCategory"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -229,7 +236,8 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- ── RECEIPT PHOTO CARD ──────────────────────── -->
+                <!-- CardView wrapping the receipt photo upload area
+                     ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -255,7 +263,9 @@
                             android:letterSpacing="0.1"
                             android:layout_marginBottom="12dp" />
 
-                        <!-- Dashed upload area -->
+                        <!-- dashed upload area wired via photoUploadArea id in the activity
+                             clicking this opens the image picker
+                             ref: https://developer.android.com/training/data-storage/shared/photopicker -->
                         <LinearLayout
                             android:id="@+id/photoUploadArea"
                             android:layout_width="match_parent"
@@ -297,13 +307,15 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- ── ACTION BUTTONS ─────────────────────────── -->
+                <!-- cancel and save buttons side by side using layout_weight
+                     ref: https://developer.android.com/reference/com/google/android/material/button/MaterialButton -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- Cancel — outlined -->
+                    <!-- cancel button uses OutlinedButton style and is wired via btnCancel id
+                         ref: https://developer.android.com/guide/components/intents-filters -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCancel"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -319,7 +331,8 @@
                         app:strokeWidth="2dp"
                         app:cornerRadius="18dp" />
 
-                    <!-- Save — honey pill -->
+                    <!-- save button wired via btnSaveExpense id to insert the expense into Room DB
+                         ref: https://developer.android.com/training/data-storage/room/accessing-data#insert -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSaveExpense"
                         android:layout_width="0dp"
@@ -342,3 +355,51 @@
     </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!--
+    References:
+
+    Android Developers, 2024. CoordinatorLayout.
+    Available at: https://developer.android.com/reference/androidx/coordinatorlayout/widget/CoordinatorLayout
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. ScrollView.
+    Available at: https://developer.android.com/reference/android/widget/ScrollView
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. LinearLayout.
+    Available at: https://developer.android.com/guide/topics/ui/layout/linear
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. View - setOnClickListener.
+    Available at: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener)
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. CardView.
+    Available at: https://developer.android.com/reference/androidx/cardview/widget/CardView
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. TextInputLayout.
+    Available at: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. MaterialDatePicker.
+    Available at: https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. Photo picker.
+    Available at: https://developer.android.com/training/data-storage/shared/photopicker
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. MaterialButton.
+    Available at: https://developer.android.com/reference/com/google/android/material/button/MaterialButton
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. Intents and Intent Filters.
+    Available at: https://developer.android.com/guide/components/intents-filters
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. Room - Accessing data using DAOs.
+    Available at: https://developer.android.com/training/data-storage/room/accessing-data#insert
+    [Accessed 19 April 2026].
+    -->

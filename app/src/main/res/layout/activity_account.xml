@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- CoordinatorLayout used as the root layout to support scrolling behaviour
+     ref: https://developer.android.com/reference/androidx/coordinatorlayout/widget/CoordinatorLayout -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,6 +9,8 @@
     android:layout_height="match_parent"
     android:background="@color/cream">
 
+    <!-- ScrollView so the whole screen scrolls if content overflows
+         ref: https://developer.android.com/reference/android/widget/ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,9 +24,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ════════════════════════════════════════════
-                 DARK HEADER
-            ════════════════════════════════════════════ -->
+            <!-- dark header section with avatar, name and email
+                 ref: https://developer.android.com/guide/topics/ui/layout/linear -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +36,8 @@
                 android:paddingTop="52dp"
                 android:paddingBottom="28dp">
 
-                <!-- Back -->
+                <!-- back button using a TextView with a click listener wired in the activity
+                     ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener) -->
                 <TextView
                     android:id="@+id/tvBack"
                     android:layout_width="wrap_content"
@@ -51,20 +55,21 @@
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp" />
 
-                <!-- Avatar + name + email row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <!-- Large avatar circle -->
+                    <!-- CardView used to create the rounded avatar circle
+                         ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="68dp"
                         android:layout_height="68dp"
                         app:cardCornerRadius="22dp"
                         app:cardElevation="0dp"
                         app:cardBackgroundColor="@color/honey">
+                        <!-- avatar initial gets set dynamically from SharedPreferences in the activity -->
                         <TextView
                             android:id="@+id/tvAvatarLarge"
                             android:layout_width="match_parent"
@@ -84,6 +89,8 @@
                         android:layout_marginStart="16dp"
                         android:orientation="vertical">
 
+                        <!-- name and email get populated from Room DB in the activity
+                             ref: https://developer.android.com/training/data-storage/room -->
                         <TextView
                             android:id="@+id/tvAccountName"
                             android:layout_width="wrap_content"
@@ -103,7 +110,8 @@
                             android:fontFamily="sans-serif-medium"
                             android:layout_marginTop="2dp" />
 
-                        <!-- Member since pill -->
+                        <!-- member since pill using a CardView with a rounded corner radius
+                             ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                         <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -130,9 +138,8 @@
 
             </LinearLayout>
 
-            <!-- ════════════════════════════════════════════
-                 BODY
-            ════════════════════════════════════════════ -->
+            <!-- body section with profile form and account options
+                 ref: https://developer.android.com/guide/topics/ui/layout/linear -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -142,7 +149,6 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="32dp">
 
-                <!-- ── PROFILE DETAILS ────────────────────── -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,6 +158,8 @@
                     android:fontFamily="@font/fredoka_one"
                     android:layout_marginBottom="12dp" />
 
+                <!-- CardView wrapping the profile form fields
+                     ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -166,7 +174,6 @@
                         android:orientation="vertical"
                         android:padding="18dp">
 
-                        <!-- Name field -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -178,6 +185,8 @@
                             android:letterSpacing="0.1"
                             android:layout_marginBottom="6dp" />
 
+                        <!-- TextInputLayout with OutlinedBox style for the name field
+                             ref: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilName"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -207,7 +216,6 @@
                                 android:paddingBottom="14dp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Email field -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -219,6 +227,8 @@
                             android:letterSpacing="0.1"
                             android:layout_marginBottom="6dp" />
 
+                        <!-- TextInputLayout with OutlinedBox style for the email field
+                             ref: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilEmail"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -248,7 +258,8 @@
                                 android:paddingBottom="14dp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Save profile button -->
+                        <!-- save button using MaterialButton wired to the activity via btnSaveProfile id
+                             ref: https://developer.android.com/reference/com/google/android/material/button/MaterialButton -->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSaveProfile"
                             android:layout_width="match_parent"
@@ -265,7 +276,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- ── DANGER ZONE ─────────────────────────── -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,6 +285,8 @@
                     android:fontFamily="@font/fredoka_one"
                     android:layout_marginBottom="12dp" />
 
+                <!-- CardView wrapping sign out and delete account options
+                     ref: https://developer.android.com/reference/androidx/cardview/widget/CardView -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -288,7 +300,8 @@
                         android:orientation="vertical"
                         android:padding="4dp">
 
-                        <!-- Dark / Light theme toggle -->
+                        <!-- theme toggle pill with light and dark options
+                             ref: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -320,7 +333,6 @@
                                     android:layout_marginTop="2dp" />
                             </LinearLayout>
 
-                            <!-- Toggle pill: two options side by side -->
                             <androidx.cardview.widget.CardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="34dp"
@@ -334,7 +346,7 @@
                                     android:gravity="center_vertical"
                                     android:padding="3dp">
 
-                                    <!-- Light — active -->
+                                    <!-- light mode button wired via btnLight id in the activity -->
                                     <androidx.cardview.widget.CardView
                                         android:id="@+id/btnLight"
                                         android:clickable="true"
@@ -357,7 +369,7 @@
                                             android:paddingEnd="12dp" />
                                     </androidx.cardview.widget.CardView>
 
-                                    <!-- Dark — inactive -->
+                                    <!-- dark mode button wired via btnDark id in the activity -->
                                     <TextView
                                         android:id="@+id/btnDark"
                                         android:clickable="true"
@@ -381,7 +393,8 @@
                             android:background="@color/input_stroke"
                             android:layout_marginStart="14dp" android:layout_marginEnd="14dp"/>
 
-                        <!-- Sign out -->
+                        <!-- sign out row wired via rowSignOut id in the activity
+                             ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener) -->
                         <LinearLayout
                             android:id="@+id/rowSignOut"
                             android:layout_width="match_parent"
@@ -402,7 +415,6 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-medium" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -410,14 +422,14 @@
                                 android:textColor="@color/muted_text"
                                 android:textSize="22sp"
                                 android:fontFamily="sans-serif-medium" />
-
                         </LinearLayout>
 
                         <View android:layout_width="match_parent" android:layout_height="1dp"
                             android:background="@color/input_stroke"
                             android:layout_marginStart="14dp" android:layout_marginEnd="14dp"/>
 
-                        <!-- Delete account -->
+                        <!-- delete account row wired via rowDeleteAccount id in the activity
+                             ref: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener) -->
                         <LinearLayout
                             android:id="@+id/rowDeleteAccount"
                             android:layout_width="match_parent"
@@ -438,7 +450,6 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-medium" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -446,7 +457,6 @@
                                 android:textColor="@color/error_red"
                                 android:textSize="22sp"
                                 android:fontFamily="sans-serif-medium" />
-
                         </LinearLayout>
 
                     </LinearLayout>
@@ -460,3 +470,43 @@
     </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!--
+    References:
+
+    Android Developers, 2024. CoordinatorLayout.
+    Available at: https://developer.android.com/reference/androidx/coordinatorlayout/widget/CoordinatorLayout
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. ScrollView.
+    Available at: https://developer.android.com/reference/android/widget/ScrollView
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. LinearLayout.
+    Available at: https://developer.android.com/guide/topics/ui/layout/linear
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. View - setOnClickListener.
+    Available at: https://developer.android.com/reference/android/view/View#setOnClickListener(android.view.View.OnClickListener)
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. CardView.
+    Available at: https://developer.android.com/reference/androidx/cardview/widget/CardView
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. Save data in a local database using Room.
+    Available at: https://developer.android.com/training/data-storage/room
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. TextInputLayout.
+    Available at: https://developer.android.com/reference/com/google/android/material/textfield/TextInputLayout
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. MaterialButton.
+    Available at: https://developer.android.com/reference/com/google/android/material/button/MaterialButton
+    [Accessed 19 April 2026].
+
+    Android Developers, 2024. Dark theme.
+    Available at: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
+    [Accessed 19 April 2026].
+    -->
