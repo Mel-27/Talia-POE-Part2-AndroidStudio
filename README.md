@@ -196,18 +196,13 @@ To enhance engagement, the app includes gamification features such as **Honey Po
 
 ### Steps
 ```bash
-git clone https://github.com/YOUR-REPO-LINK-HERE.git
-Open project in Android Studio
-Sync Gradle
-Run on emulator/device
- Testing
-GitHub Actions CI configured
-Runs on every push
-
-Run locally:
-
-./gradlew test
- Demonstration Video
+- git clone https://github.com/YOUR-REPO-LINK-HERE.git
+- Open project in Android Studio
+- Sync Gradle
+- Run on emulator/device
+- Testing
+- GitHub Actions CI configured
+- Runs on every push
 ```
 ## YouTube Link: 
 Includes full walkthrough and explanation of all features.
@@ -228,6 +223,8 @@ Includes full walkthrough and explanation of all features.
 - startTime
 - endTime
 - receiptPhotoPath
+
+---
 
 ## References
 Android Developers. (2024). Access data using Room DAOs.
