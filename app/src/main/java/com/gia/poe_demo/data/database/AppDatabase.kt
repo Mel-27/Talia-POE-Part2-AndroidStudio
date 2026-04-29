@@ -4,16 +4,25 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.gia.poe_demo.BudgetGoal
+import com.gia.poe_demo.BudgetGoalDao
+import com.gia.poe_demo.HoneyPointsDao
+import com.gia.poe_demo.data.dao.CategoryDao
 import com.gia.poe_demo.data.dao.UserDao
-import com.gia.poe_demo.data.entity.User
-import com.gia.poe_demo.data.entity.Expense
+import com.gia.poe_demo.data.entities.User
+import com.gia.poe_demo.data.entities.Expense
+import com.gia.poe_demo.data.entities.HoneyPoints
+
 import com.gia.poe_demo.data.dao.ExpenseDao
+import com.gia.poe_demo.data.dao.ReminderDao
+import com.gia.poe_demo.data.entities.Category
+import com.gia.poe_demo.data.entities.Reminder
 
 // @Database tells Room this is the main database class, listing all entities and the version number
 // exportSchema = false just means we're not saving the schema to a file
 // ref: https://developer.android.com/training/data-storage/room#database
 // ref: https://developer.android.com/reference/androidx/room/Database
-@Database(entities = [User::class, Expense::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Expense::class , Category::class, Reminder::class, BudgetGoal::class, HoneyPoints::class], version = 6, exportSchema = false)
 // abstract class extending RoomDatabase so Room can generate the implementation at compile time
 // ref: https://developer.android.com/reference/androidx/room/RoomDatabase
 abstract class AppDatabase : RoomDatabase() {
@@ -26,6 +35,13 @@ abstract class AppDatabase : RoomDatabase() {
     // ref: https://developer.android.com/training/data-storage/room/accessing-data
     abstract fun expenseDao(): ExpenseDao
 
+    abstract fun categoryDao(): CategoryDao
+
+    abstract fun reminderDao(): ReminderDao
+
+    abstract fun budgetGoalDao(): BudgetGoalDao
+
+    abstract fun honeyPointsDao(): HoneyPointsDao
     companion object {
         // @Volatile makes sure INSTANCE is always up to date across all threads
         // ref: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-volatile/
@@ -36,26 +52,25 @@ abstract class AppDatabase : RoomDatabase() {
         // synchronized block prevents multiple threads from creating it at the same time
         // ref: https://developer.android.com/training/data-storage/room#database
         // ref: https://kotlinlang.org/docs/reference/coroutines/shared-mutable-state-and-concurrency.html
+        // In AppDatabase.kt
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                // building the Room database with the application context and database name
-                // ref: https://developer.android.com/reference/androidx/room/Room#databaseBuilder(android.content.Context,java.lang.Class,java.lang.String)
-                val instance = Room.databaseBuilder(
+                Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "budgetbee_database"
+                    "budgetbee_db"
                 )
-                    // fallbackToDestructiveMigration wipes and recreates the DB on version upgrade
-                    // ref: https://developer.android.com/reference/androidx/room/RoomDatabase.Builder#fallbackToDestructiveMigration()
-                    .fallbackToDestructiveMigration()
+
+
+                   // .fallbackToDestructiveMigration()  // Deletes old data on version change
+                  //  .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
-                INSTANCE = instance
-                instance
-            }
+            } ?: INSTANCE!!
         }
 
-        // getInstance() kept as an alias so existing code using it does not break
-        // ref: https://developer.android.com/training/data-storage/room#database
+
+
+
         fun getInstance(context: Context): AppDatabase = getDatabase(context)
     }
 }

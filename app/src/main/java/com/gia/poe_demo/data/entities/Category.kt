@@ -18,3 +18,4 @@ data class Category(
     val monthlyLimit: Double = 0.0, // optional spending cap
     val createdAt: Long = System.currentTimeMillis()
 )
+

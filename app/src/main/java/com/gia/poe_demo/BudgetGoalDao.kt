@@ -16,4 +16,6 @@ interface BudgetGoalDao {
 
     @Query("DELETE FROM budget_goals WHERE monthYear = :monthYear")
     suspend fun deleteForMonth(monthYear: String)
+
+
 }

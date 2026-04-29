@@ -6,7 +6,7 @@ import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.gia.poe_demo.data.database.AppDatabase
-import com.gia.poe_demo.data.entity.User
+import com.gia.poe_demo.data.entities.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
@@ -150,11 +150,24 @@ class RegisterActivity : AppCompatActivity() {
                 userDao.registerUser(User(
                     fullName = fullName,
                     email = email,
-                    username = username,
+                    password = password,
+                    passwordHash = HashUtils.md5(password)
                     // hashing the password using MD5 before storing
                     // ref: https://developer.android.com/reference/java/security/MessageDigest
-                    password = HashUtils.md5(password)
+
                 ))
+
+                // In RegisterActivity.kt, after userDao.registerUser()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val insertedUsers = userDao.getAllUsers()
+                    android.util.Log.d("RegisterDebug", "ALL USERS AFTER INSERT: $insertedUsers")
+
+                    // Verify the specific user was saved
+                    val newUser = userDao.getUserByUsername(username)
+                    android.util.Log.d("RegisterDebug", "NEW USER: $newUser")
+                    android.util.Log.d("RegisterDebug", "Stored password: ${newUser?.password}")
+                    android.util.Log.d("RegisterDebug", "Stored hash: ${newUser?.passwordHash}")
+                }
 
                 // logging all users to Logcat to verify data is saving correctly
                 // ref: https://developer.android.com/reference/android/util/Log

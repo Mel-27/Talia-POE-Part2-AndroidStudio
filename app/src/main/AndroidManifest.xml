@@ -12,30 +12,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.POE_DEMO">
 
-
-
-
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true">
+        <activity android:name=".SplashActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".AddExpenseActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".AccountActivity"
-            android:exported="false" />
+        <activity android:name=".OnboardingActivity" android:exported="false" />
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".RegisterActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".AccountActivity" android:exported="false" />
+        <activity android:name=".AddExpenseActivity" android:exported="false" />
+        <activity android:name=".AddCategoryActivity" android:exported="false" />
+        <activity android:name=".ExpensesListActivity" android:exported="false" />
+        <activity android:name=".BudgetGoalsActivity" android:exported="false" />
+        <activity android:name=".BadgesActivity" android:exported="false" />
+        <activity android:name=".RemindersActivity" android:exported="false" />
 
     </application>
 

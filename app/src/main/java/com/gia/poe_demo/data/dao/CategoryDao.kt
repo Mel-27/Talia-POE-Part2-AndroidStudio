@@ -1,4 +1,4 @@
-package com.gia.poe_demo.db
+package com.gia.poe_demo.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -20,6 +20,9 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: Category): Long
 
+    @Insert
+    suspend fun insertAll(categories: List<Category>)
+
     @Update
     suspend fun update(category: Category)
 
@@ -32,4 +35,6 @@ interface CategoryDao {
     @Query("SELECT * FROM categories WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): Category?
 
+    @Query("SELECT COUNT(*) FROM categories")
+    suspend fun getCount(): Int
 }

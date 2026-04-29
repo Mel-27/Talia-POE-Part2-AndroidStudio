@@ -1,130 +1,198 @@
 package com.gia.poe_demo
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.gia.poe_demo.data.database.AppDatabase
+import com.gia.poe_demo.data.entities.Expense
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
-//Activity responsible for adding a new expense entry.
 class AddExpenseActivity : AppCompatActivity() {
+
+    private var selectedDateMillis: Long = 0L
+    private var id: Long = -1
+    private var selectedCategoryId: Long = -1
+
+    // Store file URI (image or PDF)
+    private var selectedFileUri: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Set the layout for this activity
         setContentView(R.layout.activity_add_expense)
 
-        //Link UI components to variables using findViewById
-        val etDescription  = findViewById<TextInputEditText>(R.id.etDescription)
-        val etAmount       = findViewById<TextInputEditText>(R.id.etAmount)
-        val etDate         = findViewById<TextInputEditText>(R.id.etDate)
+        val etDescription = findViewById<TextInputEditText>(R.id.etDescription)
+        val etAmount = findViewById<TextInputEditText>(R.id.etAmount)
+        val etDate = findViewById<TextInputEditText>(R.id.etDate)
+        val actvCategory = findViewById<AutoCompleteTextView>(R.id.actvCategory)
+
         val tilDescription = findViewById<TextInputLayout>(R.id.tilDescription)
-        val tilAmount      = findViewById<TextInputLayout>(R.id.tilAmount)
+        val tilAmount = findViewById<TextInputLayout>(R.id.tilAmount)
 
-        //Retrieve user ID passed from previous activity
-        val userId = intent.getIntExtra("USER_ID", -1)
+        val db = AppDatabase.getInstance(this)
 
-        //Get instance of the Room database
-        val db             = AppDatabase.getInstance(this)
 
-        // Create a Material Date Picker instance
-        //Adapted from (GeekforGeeks, 2022)
+        val appPrefs = getSharedPreferences("APP", MODE_PRIVATE)
+        val budgetPrefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+
+        id = appPrefs.getLong("USER_ID", -1)
+
+        if (id == -1L) {
+            val username = budgetPrefs.getString("loggedInUsername", null)
+
+            if (username != null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val user = db.userDao().getUserByUsername(username)
+
+                    if (user != null) {
+                        id = user.id
+                        appPrefs.edit().putLong("USER_ID", id).apply()
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@AddExpenseActivity, "Please log in again", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this@AddExpenseActivity, LoginActivity::class.java))
+                            finish()
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+                return
+            }
+        }
+
+        lifecycleScope.launch {
+            val categories = db.categoryDao().getAll()
+
+            withContext(Dispatchers.Main) {
+                if (categories.isEmpty()) {
+                    Toast.makeText(
+                        this@AddExpenseActivity,
+                        "No categories found. Please add categories first.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@withContext
+                }
+
+                val names = categories.map { "${it.iconEmoji} ${it.name}" }
+
+                val adapter = ArrayAdapter(
+                    this@AddExpenseActivity,
+                    android.R.layout.simple_dropdown_item_1line,
+                    names
+                )
+
+                actvCategory.setAdapter(adapter)
+
+                actvCategory.setOnClickListener {
+                    actvCategory.showDropDown()
+                }
+
+                actvCategory.setOnItemClickListener { _, _, position, _ ->
+                    selectedCategoryId = categories[position].id
+                }
+            }
+        }
+
+
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date")//Title shown on picker dialog
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) //Default day = today
+            .setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
-        //Handle date selection
         datePicker.addOnPositiveButtonClickListener { selection ->
-            etDate.tag = selection
-
-            //Format selected date into readable format
+            selectedDateMillis = selection
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             etDate.setText(sdf.format(Date(selection)))
         }
 
-        //Show date picker when date field is clicked
         etDate.setOnClickListener {
-            if (!datePicker.isAdded)
+            if (!datePicker.isAdded) {
                 datePicker.show(supportFragmentManager, "DATE_PICKER")
+            }
         }
 
-        //Back button - closes activity
-        //Adapted from (Medium, 2018)
+
+        val filePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+                if (uri != null) {
+                    selectedFileUri = uri
+
+                    // Persist permission (important for future access)
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+
+                    Toast.makeText(this, "File selected!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        findViewById<LinearLayout>(R.id.photoUploadArea).setOnClickListener {
+            filePickerLauncher.launch(arrayOf("*/*"))
+
+        }
+
+
         findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
 
-        //Cancel button - also closes activity
-        //Adapted from (Medium, 2018)
-        findViewById<MaterialButton>(R.id.btnCancel).setOnClickListener { finish() }
+        findViewById<MaterialButton>(R.id.btnCancel).setOnClickListener {
+            finish()
+        }
 
-        //Save button logic
-        //Adapted from (Medium, 2018)
+        // Replace your btnSaveExpense click listener:
+        // In your btnSaveExpense click listener, change this line:
+       // val expenseId = db.expenseDao().insertExpense(expense)  // ✅ Use insertExpense
+
+// Full corrected save block:
         findViewById<MaterialButton>(R.id.btnSaveExpense).setOnClickListener {
-
-            //Get user input values
             val description = etDescription.text.toString().trim()
-            val amount      = etAmount.text.toString().trim()
-            val date        = etDate.text.toString().trim()
+            val amount = etAmount.text.toString().trim().toDoubleOrNull()
 
-            //Input validation for description and amount
-            tilDescription.error = if (description.isEmpty()) "Enter a description" else null
-            tilAmount.error      = if (amount.isEmpty() || amount.toDoubleOrNull() == null) "Enter a valid amount" else null
+            tilDescription.error = if (description.isEmpty()) "Enter description" else null
+            tilAmount.error = if (amount == null) "Enter valid amount" else null
 
-            //Check if any field is invalid.
-            if (description.isEmpty() || amount.toDoubleOrNull() == null || date.isEmpty()) {
-
-                //Show toast if date is missing.
-                if (date.isEmpty()) Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show()
+            if (description.isEmpty() || amount == null ||
+                selectedDateMillis == 0L || selectedCategoryId == -1L) {
+                Toast.makeText(this, "Complete all required fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // Launch coroutine to perform database operation off the main thread
-            //Adapted from (Android Developers , 2026)
+
             lifecycleScope.launch {
-
-                // Retrieve stored date value or fallback to current time
-                val date = etDate.tag as? Long ?: System.currentTimeMillis()
-
-                // Insert new expense into database
-                db.expenseDao().insert(
-                    Expense(
-                        userId = userId,
-                        description = description,
-                        amount      = amount.toDouble(),
-                        date        = date
-                    )
+                val expense = Expense(
+                    categoryId = selectedCategoryId,
+                    description = description,
+                    amount = amount,
+                    date = selectedDateMillis,
+                    startTime = "",
+                    endTime = "",
+                    receiptPhotoPath = selectedFileUri?.toString() ?: ""
                 )
-                // Notify user of success
+
+                val expenseId = db.expenseDao().insertExpense(expense)
+
                 Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
-                // Close activity after saving
+
+                val intent = Intent(this@AddExpenseActivity, ExpensesListActivity::class.java).apply {
+                    putExtra("SHOW_NEW_EXPENSE", expenseId)
+                    putExtra("NEW_EXPENSE_DATE", selectedDateMillis)
+                }
+                startActivity(intent)
                 finish()
             }
         }
     }
 }
-
-
-/*
-
-References:
-
-GeeksforGeeks, 2022. Material Design Date Picker in Android using Kotlin.
-Available at: https://www.geeksforgeeks.org/kotlin/material-design-date-picker-in-android-using-kotlin/
-[Accessed 27 April 2026].
-
-Android Developers, 2026. Use Kotlin coroutines with lifecycle-aware components.
-Available at: https://developer.android.com/topic/libraries/architecture/coroutines
-[Accessed 27 April 2026].
-
-Android Ideas (Medium), 2018. findViewById in Kotlin.
-Available at: https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
-[Accessed 27 April 2026].
-
- */

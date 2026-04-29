@@ -32,14 +32,20 @@ class AccountActivity : AppCompatActivity() {
         }
         // Dark mode button - switches app theme to dark mode
         //Adapted from (GeekforGeeks, 2022)
-        findViewById<TextView>(R.id.btnDark).setOnClickListener {
+        findViewById<android.view.View>(R.id.rowSignOut)?.setOnClickListener {
+            // Clear all session data
+            getSharedPreferences("APP", MODE_PRIVATE).edit().clear().apply()
+            getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE).edit().clear().apply()
+            getSharedPreferences("budget_bee_prefs", MODE_PRIVATE).edit().clear().apply()
 
-            // Display feedback to user
-            Toast.makeText(this, "Dark tapped", Toast.LENGTH_SHORT).show()
-
-            // Set app theme to dark mode
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            // Go back to login
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
+
+
     }
 }
 /*

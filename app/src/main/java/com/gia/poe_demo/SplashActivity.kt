@@ -6,6 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.gia.poe_demo.data.database.AppDatabase
+import com.gia.poe_demo.data.util.CategorySeeder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // @SuppressLint used here to suppress the CustomSplashScreen lint warning since we built our own
 // ref: https://developer.android.com/reference/android/annotation/SuppressLint
@@ -31,16 +37,10 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // used findViewById() to grab the loading dots TextView
-        // ref: https://developer.android.com/reference/android/view/View#findViewById(int)
         val tvLoadingDots = findViewById<android.widget.TextView>(R.id.tvLoadingDots)
 
-        // Handler tied to the main looper so UI updates run on the main thread
-        // ref: https://developer.android.com/reference/android/os/Looper#getMainLooper()
         loadingDotsHandler = Handler(Looper.getMainLooper())
 
-        // Runnable cycles through dot states every 400ms to animate the loading dots
-        // ref: https://developer.android.com/reference/android/os/Handler#postDelayed(java.lang.Runnable,%20long)
         loadingDotsRunnable = object : Runnable {
             override fun run() {
                 tvLoadingDots.text = dotStates[dotIndex % dotStates.size]
@@ -50,22 +50,29 @@ class SplashActivity : AppCompatActivity() {
         }
         loadingDotsHandler.post(loadingDotsRunnable)
 
-        // after 3 seconds checks SharedPreferences to decide where to navigate
-        // ref: https://developer.android.com/training/data-storage/shared-preferences
-        Handler(Looper.getMainLooper()).postDelayed({
-            val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
-            val isRegistered = prefs.getBoolean("isRegistered", false)
-
-            // routes to MainActivity if already registered, otherwise goes to Onboarding
-            // ref: https://developer.android.com/guide/components/intents-filters
-            if (isRegistered) {
-                startActivity(Intent(this, MainActivity::class.java))
-            } else {
-                startActivity(Intent(this, OnboardingActivity::class.java))
+        // ✅ INSERT SEEDING HERE (your required line, properly integrated)
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                CategorySeeder.seed(AppDatabase.getInstance(this@SplashActivity))
             }
-            // calling finish() so the user cant navigate back to the splash screen
-            // ref: https://developer.android.com/reference/android/app/Activity#finish()
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            val prefs = getSharedPreferences("budget_bee_prefs", MODE_PRIVATE)
+
+            val onboardingDone = prefs.getBoolean("onboarding_done", false)
+            val isLoggedIn = prefs.getBoolean("isLoggedIn", false)
+
+            val nextActivity = when {
+                !onboardingDone -> OnboardingActivity::class.java
+                !isLoggedIn -> LoginActivity::class.java
+                else -> MainActivity::class.java
+            }
+
+            startActivity(Intent(this, nextActivity))
             finish()
+
         }, SPLASH_DURATION)
     }
 

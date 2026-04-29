@@ -346,11 +346,13 @@
 
                                     <!-- Light — active -->
                                     <androidx.cardview.widget.CardView
+                                        android:id="@+id/btnLight"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         app:cardCornerRadius="50dp"
                                         app:cardElevation="2dp"
                                         app:cardBackgroundColor="@color/white">
+
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="match_parent"
@@ -366,6 +368,7 @@
 
                                     <!-- Dark — inactive -->
                                     <TextView
+                                        android:id="@+id/btnDark"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:text="🌙 Dark"

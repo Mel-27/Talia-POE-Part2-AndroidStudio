@@ -3,7 +3,8 @@ package com.gia.poe_demo.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.gia.poe_demo.data.entity.Expense
+import com.gia.poe_demo.data.entities.Expense
+import com.gia.poe_demo.data.entities.CategoryTotal
 
 // @Dao marks this interface as a Room Database Access Object
 // ref: https://developer.android.com/training/data-storage/room/accessing-data
@@ -11,18 +12,52 @@ import com.gia.poe_demo.data.entity.Expense
 @Dao
 interface ExpenseDao {
 
-    // @Insert tells Room to handle the SQL insert automatically
-    // suspend means it runs off the main thread using coroutines
-    // ref: https://developer.android.com/training/data-storage/room/accessing-data#insert
-    // ref: https://developer.android.com/reference/androidx/room/Insert
     @Insert
     suspend fun insert(expense: Expense)
 
-    // queries the expenses table by userId and returns results ordered by newest first
-    // ref: https://developer.android.com/training/data-storage/room/accessing-data#query
-    // ref: https://developer.android.com/reference/androidx/room/Query
-    @Query("SELECT * FROM expenses WHERE userId = :userId ORDER BY id DESC")
-    suspend fun getExpensesByUser(userId: Int): List<Expense>
+    @Insert
+    suspend fun insertExpense(expense: Expense): Long
+
+    @Query("""
+        SELECT * FROM expenses
+        ORDER BY date DESC
+    """)
+    fun getAllExpenses(): kotlinx.coroutines.flow.Flow<List<Expense>>
+
+    @Query("""
+        SELECT * FROM expenses
+        WHERE date BETWEEN :start AND :end
+        ORDER BY date DESC
+    """)
+    fun getByPeriod(
+        start: Long,
+        end: Long
+    ): kotlinx.coroutines.flow.Flow<List<Expense>>
+
+    @Query("""
+        DELETE FROM expenses
+        WHERE id = :expenseId
+    """)
+    suspend fun deleteExpense(expenseId: Long)
+
+    @Query("""
+        SELECT * FROM expenses
+        WHERE id = :expenseId
+        LIMIT 1
+    """)
+    suspend fun getExpenseById(expenseId: Long): Expense?
+
+    @Query("""
+    SELECT categoryId AS categoryId,
+           SUM(amount) AS total
+    FROM expenses
+    WHERE date BETWEEN :start AND :end
+    GROUP BY categoryId
+""")
+    fun getCategoryTotalsForPeriod(
+        start: Long,
+        end: Long
+    ): kotlinx.coroutines.flow.Flow<List<CategoryTotal>>
 }
 
 /*

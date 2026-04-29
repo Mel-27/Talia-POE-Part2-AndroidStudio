@@ -13,17 +13,17 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.Observer
+
 import com.gia.poe_demo.databinding.ActivityExpensesListBinding
-import com.gia.poe_demo.db.AppDatabase
+import com.gia.poe_demo.data.database.AppDatabase
+import com.gia.poe_demo.data.entities.CategoryTotal
 import com.gia.poe_demo.data.entities.Expense
-import com.gia.poe_demo.db.CategoryTotal
-import com.gia.poe_demo.AddExpenseActivity
-import com.gia.poe_demo.AddCategoryActivity
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
+import kotlinx.coroutines.flow.collectLatest
 import java.util.*
+
 
 /**
  * ExpensesListActivity — shows expense entries for a user-selectable period.
@@ -71,10 +71,20 @@ class ExpensesListActivity : AppCompatActivity() {
         setupBottomNav()
 
         // Hide static placeholder cards from the XML layout
-        listOf(binding.cardExpense1, binding.cardExpense2,
-            binding.cardExpense3, binding.cardExpense4).forEach { it.visibility = View.GONE }
+        listOf(
+            binding.cardExpense1, binding.cardExpense2,
+            binding.cardExpense3, binding.cardExpense4
+        ).forEach { it.visibility = View.GONE }
 
         observeExpenses()
+
+        // Handle new expense from AddExpenseActivity
+        val newExpenseId = intent.getLongExtra("SHOW_NEW_EXPENSE", -1L)
+        if (newExpenseId != -1L) {
+            // Trigger refresh to show new expense
+            observeExpenses()
+        }
+
     }
 
     private fun applyTheme() {
@@ -184,24 +194,29 @@ class ExpensesListActivity : AppCompatActivity() {
 
     // Observe RoomDB - FIXED: Specify the Observer type explicitly
     private fun observeExpenses() {
-        db.expenseDao().getByPeriod(filterStart, filterEnd).observe(this, Observer { list ->
-            expenses = list ?: emptyList()
-            android.util.Log.d("ExpensesList", "Loaded ${expenses.size} expenses for period")
-            renderExpenses()
-            updateSummary(expenses)
-
-            // Also load category totals for the summary
-            loadCategoryTotals()
-        })
+        lifecycleScope.launch {
+            db.expenseDao().getByPeriod(filterStart, filterEnd)
+                .collectLatest { list ->
+                    expenses = list
+                    renderExpenses()
+                    updateSummary(expenses)
+                    loadCategoryTotals() // you forgot this call before
+                }
+        }
     }
 
     private fun loadCategoryTotals() {
-        db.expenseDao().getCategoryTotalsForPeriod(filterStart, filterEnd)
-            .observe(this, Observer { totals ->
-                if (!totals.isNullOrEmpty()) {
-                    updateCategorySummary(totals)
+        lifecycleScope.launch {
+            db.expenseDao().getCategoryTotalsForPeriod(filterStart, filterEnd)
+                .collectLatest { totals ->
+
+                    if (totals.isNotEmpty()) {
+                        updateCategorySummary(totals)
+                    } else {
+                        binding.tvCategoryBreakdown.text = "No expenses in this period"
+                    }
                 }
-            })
+        }
     }
 
     private fun updateCategorySummary(totals: List<CategoryTotal>) {
@@ -210,7 +225,8 @@ class ExpensesListActivity : AppCompatActivity() {
             val categoryName = categoryMap[total.categoryId] ?: "Unknown"
             sb.append("$categoryName: R${"%.0f".format(total.total)}\n")
         }
-        binding.tvCategoryBreakdown.text = if (sb.isNotEmpty()) sb.toString() else "No expenses in this period"
+        binding.tvCategoryBreakdown.text =
+            if (sb.isNotEmpty()) sb.toString() else "No expenses in this period"
         android.util.Log.d("ExpensesList", "Category totals: ${totals.size} categories")
     }
 
@@ -388,7 +404,10 @@ class ExpensesListActivity : AppCompatActivity() {
         binding.tvTotalItems.text = list.size.toString()
         binding.tvAvgPerDay.text = "R${"%.0f".format(total / days)}"
 
-        android.util.Log.d("ExpensesList", "Summary - Total: $total, Items: ${list.size}, Avg: ${total/days}")
+        android.util.Log.d(
+            "ExpensesList",
+            "Summary - Total: $total, Items: ${list.size}, Avg: ${total / days}"
+        )
     }
 
     // Add category button
@@ -432,7 +451,8 @@ class ExpensesListActivity : AppCompatActivity() {
         return when {
             sameDay(today, d) -> "TODAY"
             sameDay(yesterday, d) -> "YESTERDAY"
-            else -> SimpleDateFormat("EEE d MMM", Locale.getDefault()).format(Date(millis)).uppercase()
+            else -> SimpleDateFormat("EEE d MMM", Locale.getDefault()).format(Date(millis))
+                .uppercase()
         }
     }
 
@@ -445,6 +465,9 @@ class ExpensesListActivity : AppCompatActivity() {
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
     }
+
+
+
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
     private fun dp(value: Float): Float = value * resources.displayMetrics.density

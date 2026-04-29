@@ -55,6 +55,10 @@ class OnboardingActivity : AppCompatActivity() {
     // ref: https://developer.android.com/guide/components/intents-filters
     // ref: https://developer.android.com/reference/android/app/Activity#finish()
     private fun goToLogin() {
+
+        val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+        prefs.edit().putBoolean("onboarding_done", true).apply()
+
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }

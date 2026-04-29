@@ -228,16 +228,19 @@
                             android:gravity="center"
                             android:padding="16dp">
 
+
+
                             <TextView
+                                android:id="@+id/tvNextBadgeLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="✓ Earned"
-                                android:textColor="@color/success_green"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
+                                android:text="Badge Earned!"
+                                android:textColor="#88291A00"
+                                android:textSize="12sp"
                                 android:fontFamily="sans-serif-medium"
-                                android:layout_gravity="end"
-                                android:layout_marginBottom="6dp" />
+                                android:gravity="center"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="16dp"/>
 
                             <ImageView
                                 android:layout_width="110dp"

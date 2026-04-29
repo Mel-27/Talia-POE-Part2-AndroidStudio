@@ -12,7 +12,8 @@ import com.gia.poe_demo.databinding.ActivityCategoriesBinding
 import kotlinx.coroutines.launch
 import com.gia.poe_demo.data.entities.Category
 import com.gia.poe_demo.AddExpenseActivity
-import com.gia.poe_demo.db.AppDatabase
+import com.gia.poe_demo.data.database.AppDatabase
+
 
 /**
  * AddCategoryActivity - creating a new expense category.
