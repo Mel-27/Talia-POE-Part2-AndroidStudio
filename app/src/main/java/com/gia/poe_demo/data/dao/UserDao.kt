@@ -20,6 +20,16 @@ interface UserDao {
     @Insert
     suspend fun registerUser(user: User)
 
+    // login by fullName with hashed password
+    // ref: https://developer.android.com/training/data-storage/room/accessing-data#query
+    @Query("SELECT * FROM users WHERE fullName = :fullName AND passwordHash = :passwordHash LIMIT 1")
+    suspend fun loginUserByHash(fullName: String, passwordHash: String): User?
+
+    // login by fullName with plain password
+    // ref: https://developer.android.com/training/data-storage/room/accessing-data#query
+    @Query("SELECT * FROM users WHERE fullName = :fullName AND password = :password LIMIT 1")
+    suspend fun loginUserByPlain(fullName: String, password: String): User?
+
     // login by email with hashed password
     // ref: https://developer.android.com/training/data-storage/room/accessing-data#query
     @Query("SELECT * FROM users WHERE email = :email AND passwordHash = :passwordHash LIMIT 1")
