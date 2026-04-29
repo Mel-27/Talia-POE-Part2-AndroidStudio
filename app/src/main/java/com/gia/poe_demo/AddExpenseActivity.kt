@@ -1,197 +1,398 @@
 package com.gia.poe_demo
 
+import androidx.appcompat.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.gia.poe_demo.data.database.AppDatabase
+import com.gia.poe_demo.R
+import com.gia.poe_demo.data.entities.Category
 import com.gia.poe_demo.data.entities.Expense
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.Dispatchers
+import com.gia.poe_demo.databinding.ActivityAddExpenseBinding
+import com.gia.poe_demo.data.database.AppDatabase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddExpenseActivity : AppCompatActivity() {
 
-    private var selectedDateMillis: Long = 0L
-    private var id: Long = -1
+    private lateinit var binding: ActivityAddExpenseBinding
+    private lateinit var db: AppDatabase
     private var selectedCategoryId: Long = -1
+    private var categories: List<Category> = emptyList()
 
-    // Store file URI (image or PDF)
-    private var selectedFileUri: Uri? = null
+    // Date and time as Long timestamps
+    private var selectedDateTimestamp: Long = System.currentTimeMillis()
+    private var selectedStartTimeTimestamp: Long = System.currentTimeMillis()
+    private var selectedEndTimeTimestamp: Long = System.currentTimeMillis()
+
+    // For photo capture
+    private var currentPhotoPath: String? = null
+    private var categoryAdapter: ArrayAdapter<String>? = null
+
+    // Register activity result launcher for camera
+    private val takePictureLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            setPhotoPreview()
+            android.util.Log.d("AddExpense", "Photo captured and saved at: $currentPhotoPath")
+            Toast.makeText(this, "Receipt photo attached", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Register launcher for gallery selection
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val imageUri = result.data?.data
+            imageUri?.let { uri ->
+                currentPhotoPath = getRealPathFromURI(uri)
+                setPhotoPreview()
+                android.util.Log.d("AddExpense", "Photo selected from gallery: $currentPhotoPath")
+                Toast.makeText(this, "Receipt photo attached", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_expense)
+        binding = ActivityAddExpenseBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val etDescription = findViewById<TextInputEditText>(R.id.etDescription)
-        val etAmount = findViewById<TextInputEditText>(R.id.etAmount)
-        val etDate = findViewById<TextInputEditText>(R.id.etDate)
-        val actvCategory = findViewById<AutoCompleteTextView>(R.id.actvCategory)
+        db = AppDatabase.getInstance(this)
 
-        val tilDescription = findViewById<TextInputLayout>(R.id.tilDescription)
-        val tilAmount = findViewById<TextInputLayout>(R.id.tilAmount)
+        setupBackButton()
+        setupDateAndTimePickers()
+        setupPhotoUploadArea()
+        setupSaveButton()
+        loadCategories()
+    }
 
-        val db = AppDatabase.getInstance(this)
+    private fun setupBackButton() {
+        binding.tvBack.setOnClickListener {
+            finish()
+        }
+    }
 
+    private fun setupDateAndTimePickers() {
+        // Date picker
+        binding.etDate.setOnClickListener {
+            showDatePicker()
+        }
 
-        val appPrefs = getSharedPreferences("APP", MODE_PRIVATE)
-        val budgetPrefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+        // Start time picker
+        binding.etStartTime.setOnClickListener {
+            showTimePicker(isStartTime = true)
+        }
 
-        id = appPrefs.getLong("USER_ID", -1)
+        // End time picker
+        binding.etEndTime.setOnClickListener {
+            showTimePicker(isStartTime = false)
+        }
 
-        if (id == -1L) {
-            val username = budgetPrefs.getString("loggedInUsername", null)
+        // Set initial values
+        updateDateDisplay()
+        updateTimeDisplay()
+    }
 
-            if (username != null) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val user = db.userDao().getUserByUsername(username)
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = selectedDateTimestamp
 
-                    if (user != null) {
-                        id = user.id
-                        appPrefs.edit().putLong("USER_ID", id).apply()
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(this@AddExpenseActivity, "Please log in again", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@AddExpenseActivity, LoginActivity::class.java))
-                            finish()
-                        }
-                    }
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                calendar.set(year, month, dayOfMonth)
+                selectedDateTimestamp = calendar.timeInMillis
+                updateDateDisplay()
+                android.util.Log.d("AddExpense", "Date selected: ${getDateString()}")
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun showTimePicker(isStartTime: Boolean) {
+        val calendar = Calendar.getInstance()
+        val currentTimestamp = if (isStartTime) selectedStartTimeTimestamp else selectedEndTimeTimestamp
+        calendar.timeInMillis = currentTimestamp
+
+        TimePickerDialog(
+            this,
+            { _, hourOfDay, minute ->
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                calendar.set(Calendar.MINUTE, minute)
+                if (isStartTime) {
+                    selectedStartTimeTimestamp = calendar.timeInMillis
+                    updateStartTimeDisplay()
+                } else {
+                    selectedEndTimeTimestamp = calendar.timeInMillis
+                    updateEndTimeDisplay()
                 }
-            } else {
-                Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
+                android.util.Log.d("AddExpense", "${if (isStartTime) "Start" else "End"} time selected: ${getTimeString(calendar.timeInMillis)}")
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        ).show()
+    }
+
+    private fun updateDateDisplay() {
+        binding.etDate.setText(getDateString())
+    }
+
+    private fun updateStartTimeDisplay() {
+        binding.etStartTime.setText(getTimeString(selectedStartTimeTimestamp))
+    }
+
+    private fun updateEndTimeDisplay() {
+        binding.etEndTime.setText(getTimeString(selectedEndTimeTimestamp))
+    }
+
+    private fun updateTimeDisplay() {
+        updateStartTimeDisplay()
+        updateEndTimeDisplay()
+    }
+
+    private fun getDateString(): String {
+        val format = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        return format.format(Date(selectedDateTimestamp))
+    }
+
+    private fun getTimeString(timestamp: Long): String {
+        val format = SimpleDateFormat("h:mm a", Locale.getDefault())
+        return format.format(Date(timestamp))
+    }
+
+    private fun setupPhotoUploadArea() {
+        // Handle photo upload area click
+        binding.photoUploadArea.setOnClickListener {
+            showPhotoOptionsDialog()
+        }
+
+        // Handle take photo button
+        binding.btnTakePhoto.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
+
+        // Handle choose from gallery button
+        binding.btnChooseFromGallery.setOnClickListener {
+            openGallery()
+        }
+
+        // Handle remove photo button
+        binding.btnRemovePhoto.setOnClickListener {
+            removePhoto()
+        }
+    }
+
+    private fun showPhotoOptionsDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
+        AlertDialog.Builder(this)
+            .setTitle("Add Receipt Photo")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> dispatchTakePictureIntent()
+                    1 -> openGallery()
+                }
+            }
+            .show()
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                val photoFile: File? = createImageFile()
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "${packageName}.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureLauncher.launch(takePictureIntent)
+                }
+            }
+        }
+    }
+
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName, ".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryLauncher.launch(intent)
+    }
+
+    private fun setPhotoPreview() {
+        currentPhotoPath?.let { path ->
+            val file = File(path)
+            if (file.exists()) {
+                // Hide placeholder views
+                binding.tvPhotoPlaceholderIcon.visibility = TextView.GONE
+                binding.tvPhotoPlaceholderTitle.visibility = TextView.GONE
+                binding.tvPhotoPlaceholderSub.visibility = TextView.GONE
+
+                // Show preview
+                binding.ivReceiptPreview.visibility = ImageView.VISIBLE
+                binding.tvPhotoAttachedLabel.visibility = TextView.VISIBLE
+                binding.btnRemovePhoto.visibility = Button.VISIBLE
+
+                // Set image
+                binding.ivReceiptPreview.setImageURI(Uri.fromFile(file))
+            }
+        }
+    }
+
+    private fun removePhoto() {
+        currentPhotoPath = null
+
+        // Show placeholder views
+        binding.tvPhotoPlaceholderIcon.visibility = TextView.VISIBLE
+        binding.tvPhotoPlaceholderTitle.visibility = TextView.VISIBLE
+        binding.tvPhotoPlaceholderSub.visibility = TextView.VISIBLE
+
+        // Hide preview and buttons
+        binding.ivReceiptPreview.visibility = ImageView.GONE
+        binding.tvPhotoAttachedLabel.visibility = TextView.GONE
+        binding.btnRemovePhoto.visibility = Button.GONE
+
+        // Clear image
+        binding.ivReceiptPreview.setImageDrawable(null)
+
+        Toast.makeText(this, "Photo removed", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("AddExpense", "Receipt photo removed")
+    }
+
+    private fun getRealPathFromURI(uri: Uri): String? {
+        return if (uri.scheme == "file") {
+            uri.path
+        } else {
+            // For content URIs, get the actual file path
+            var filePath: String? = null
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                if (cursor.moveToFirst()) {
+                    filePath = cursor.getString(columnIndex)
+                }
+            }
+            filePath
+        }
+    }
+
+    private fun loadCategories() {
+        lifecycleScope.launch {
+            categories = db.categoryDao().getAll()
+            setupCategorySpinner()
+        }
+    }
+
+    private fun setupCategorySpinner() {
+        val categoryNames = categories.map { "${it.iconEmoji} ${it.name}" }
+        categoryAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categoryNames)
+        binding.actvCategory.setAdapter(categoryAdapter)
+
+        binding.actvCategory.setOnItemClickListener { _, _, position, _ ->
+            selectedCategoryId = categories[position].id
+            android.util.Log.d("AddExpense", "Category selected: ${categories[position].name}")
+        }
+    }
+
+    private fun setupSaveButton() {
+        binding.btnSaveExpense.setOnClickListener {
+            saveExpense()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun saveExpense() {
+        val description = binding.etDescription.text.toString().trim()
+        val amountText = binding.etAmount.text.toString().trim()
+        val categoryText = binding.actvCategory.text.toString()
+
+        // Input validation
+        when {
+            description.isEmpty() -> {
+                binding.etDescription.error = "Please enter a description"
+                return
+            }
+            amountText.isEmpty() -> {
+                binding.etAmount.error = "Please enter an amount"
+                return
+            }
+            amountText.toDoubleOrNull() == null -> {
+                binding.etAmount.error = "Please enter a valid amount"
+                return
+            }
+            categoryText.isEmpty() || categoryText == "Category" -> {
+                Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
                 return
             }
         }
 
+        val amount = amountText.toDouble()
+
+        // Combined date with start time for the expense timestamp
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = selectedDateTimestamp
+
+        val startTimeCalendar = Calendar.getInstance()
+        startTimeCalendar.timeInMillis = selectedStartTimeTimestamp
+
+        calendar.set(Calendar.HOUR_OF_DAY, startTimeCalendar.get(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, startTimeCalendar.get(Calendar.MINUTE))
+
+        val expenseDateTimeStamp = calendar.timeInMillis
+
+        // Format times as strings for display
+        val startTimeStr = getTimeString(selectedStartTimeTimestamp)
+        val endTimeStr = getTimeString(selectedEndTimeTimestamp)
+
+        val expense = Expense(
+            categoryId = selectedCategoryId,
+            description = description,
+            amount = amount,
+            date = expenseDateTimeStamp,
+            startTime = startTimeStr,
+            endTime = endTimeStr,
+            receiptPhotoPath = currentPhotoPath
+        )
+
         lifecycleScope.launch {
-            val categories = db.categoryDao().getAll()
+            try {
+                db.expenseDao().insert(expense)
 
-            withContext(Dispatchers.Main) {
-                if (categories.isEmpty()) {
-                    Toast.makeText(
-                        this@AddExpenseActivity,
-                        "No categories found. Please add categories first.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@withContext
-                }
+                android.util.Log.d("AddExpense", "Expense saved: $description - R$amount")
+                android.util.Log.d("AddExpense", "Photo attached: ${currentPhotoPath != null}")
 
-                val names = categories.map { "${it.iconEmoji} ${it.name}" }
-
-                val adapter = ArrayAdapter(
-                    this@AddExpenseActivity,
-                    android.R.layout.simple_dropdown_item_1line,
-                    names
-                )
-
-                actvCategory.setAdapter(adapter)
-
-                actvCategory.setOnClickListener {
-                    actvCategory.showDropDown()
-                }
-
-                actvCategory.setOnItemClickListener { _, _, position, _ ->
-                    selectedCategoryId = categories[position].id
-                }
-            }
-        }
-
-
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
-
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            selectedDateMillis = selection
-            val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-            etDate.setText(sdf.format(Date(selection)))
-        }
-
-        etDate.setOnClickListener {
-            if (!datePicker.isAdded) {
-                datePicker.show(supportFragmentManager, "DATE_PICKER")
-            }
-        }
-
-
-        val filePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-                if (uri != null) {
-                    selectedFileUri = uri
-
-                    // Persist permission (important for future access)
-                    contentResolver.takePersistableUriPermission(
-                        uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    )
-
-                    Toast.makeText(this, "File selected!", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-        findViewById<LinearLayout>(R.id.photoUploadArea).setOnClickListener {
-            filePickerLauncher.launch(arrayOf("*/*"))
-
-        }
-
-
-        findViewById<TextView>(R.id.tvBack).setOnClickListener { finish() }
-
-        findViewById<MaterialButton>(R.id.btnCancel).setOnClickListener {
-            finish()
-        }
-
-        // Replace your btnSaveExpense click listener:
-        // In your btnSaveExpense click listener, change this line:
-       // val expenseId = db.expenseDao().insertExpense(expense)  // ✅ Use insertExpense
-
-// Full corrected save block:
-        findViewById<MaterialButton>(R.id.btnSaveExpense).setOnClickListener {
-            val description = etDescription.text.toString().trim()
-            val amount = etAmount.text.toString().trim().toDoubleOrNull()
-
-            tilDescription.error = if (description.isEmpty()) "Enter description" else null
-            tilAmount.error = if (amount == null) "Enter valid amount" else null
-
-            if (description.isEmpty() || amount == null ||
-                selectedDateMillis == 0L || selectedCategoryId == -1L) {
-                Toast.makeText(this, "Complete all required fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            lifecycleScope.launch {
-                val expense = Expense(
-                    categoryId = selectedCategoryId,
-                    description = description,
-                    amount = amount,
-                    date = selectedDateMillis,
-                    startTime = "",
-                    endTime = "",
-                    receiptPhotoPath = selectedFileUri?.toString() ?: ""
-                )
-
-                val expenseId = db.expenseDao().insertExpense(expense)
-
-                Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this@AddExpenseActivity, ExpensesListActivity::class.java).apply {
-                    putExtra("SHOW_NEW_EXPENSE", expenseId)
-                    putExtra("NEW_EXPENSE_DATE", selectedDateMillis)
-                }
-                startActivity(intent)
+                Toast.makeText(this@AddExpenseActivity, "Expense saved successfully!", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
                 finish()
+            } catch (e: Exception) {
+                android.util.Log.e("AddExpense", "Error saving expense", e)
+                Toast.makeText(this@AddExpenseActivity, "Error saving expense: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

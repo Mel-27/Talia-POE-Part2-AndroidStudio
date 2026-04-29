@@ -2,7 +2,7 @@
 <!--
     FileProvider paths configuration.
     Allows the camera to write photos to the app's external storage directory.
-    Reference: Android FileProvider documentation; IIE PROG7313 Module Guide (2026)
+    Reference: Android FileProvider documentation; IIE PROG7313 Module Manual (2026)
 -->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
 
