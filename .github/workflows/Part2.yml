@@ -1,4 +1,4 @@
-name: Android CI
+name: Part2 Automated Testing
 
 on:
   push:
@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 - Check out the code
+     
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2 - Set up Java 17 (required for AGP 8.x)
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -23,15 +22,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      # Step 3 - Grant execute permission for Gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Step 4 - Build the project
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
-      # Step 5 - Upload APK as artifact
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         if: success()
