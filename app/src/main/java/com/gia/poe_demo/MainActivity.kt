@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadDashboardSummary() {
+
         val cal = Calendar.getInstance()
+
         val startOfMonth = Calendar.getInstance().apply {
             set(Calendar.DAY_OF_MONTH, 1)
             set(Calendar.HOUR_OF_DAY, 0)
@@ -86,17 +88,21 @@ class MainActivity : AppCompatActivity() {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
+
         val now = System.currentTimeMillis()
 
         val monthYear = String.format(
             Locale.getDefault(), "%d-%02d",
-            cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH) + 1
         )
 
         lifecycleScope.launch {
+
             db.expenseDao().getByPeriod(startOfMonth, now).collect { expenses ->
 
                 val totalSpent = expenses.sumOf { it.amount }
+
 
                 val goal = withContext(Dispatchers.IO) {
                     db.budgetGoalDao().getGoalForMonth(monthYear)
@@ -104,46 +110,46 @@ class MainActivity : AppCompatActivity() {
 
                 val budget = goal?.totalMonthlyBudget ?: 0.0
                 val remaining = budget - totalSpent
+
                 val progress = if (budget > 0)
                     ((totalSpent / budget) * 100).toInt().coerceIn(0, 100)
                 else 0
 
-                // Balance card
+
                 findViewById<TextView>(R.id.tvBalanceAmount)?.text =
                     if (budget == 0.0) "No budget set"
                     else "R ${currencyFormat.format(remaining)}"
+
                 findViewById<TextView>(R.id.tvBalanceSub)?.text =
                     "of R ${currencyFormat.format(budget)} budget"
 
-                // Quick cards
                 findViewById<TextView>(R.id.tvSpentAmount)?.text =
                     "R ${currencyFormat.format(totalSpent)}"
+
                 val saved = (budget - totalSpent).coerceAtLeast(0.0)
                 findViewById<TextView>(R.id.tvSavedAmount)?.text =
                     "R ${currencyFormat.format(saved)}"
 
-                // Progress bar
                 findViewById<ProgressBar>(R.id.progressBudget)?.progress = progress
+
                 findViewById<TextView>(R.id.tvBudgetSpent)?.text =
                     "R${currencyFormat.format(totalSpent)} spent"
+
                 findViewById<TextView>(R.id.tvBudgetGoal)?.text =
                     "R${currencyFormat.format(budget)} goal"
 
-                // Badge
                 val badge = findViewById<TextView>(R.id.tvBudgetBadge)
 
                 if (progress >= 90) {
                     badge?.text = "Over Budget"
                     badge?.setBackgroundColor(getColor(R.color.error_red))
-                    badge?.setTextColor(getColor(R.color.white))
                 } else {
                     badge?.text = "On Track"
                     badge?.setBackgroundColor(getColor(R.color.success_green))
-                    badge?.setTextColor(getColor(R.color.white))
                 }
 
-                // Top categories and recent transactions
                 loadTopCategories(startOfMonth, now, goal)
+
                 loadRecentTransactions(
                     expenses.sortedByDescending { it.date }.take(3)
                 )

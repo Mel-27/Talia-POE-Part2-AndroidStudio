@@ -192,7 +192,7 @@ class ExpensesListActivity : AppCompatActivity() {
         binding.tvSortAsc.setTextColor(getColor(if (!sortDesc) R.color.black_deep else R.color.muted_text))
     }
 
-    // Observe RoomDB - FIXED: Specify the Observer type explicitly
+
     private fun observeExpenses() {
         lifecycleScope.launch {
             db.expenseDao().getByPeriod(filterStart, filterEnd)
@@ -469,3 +469,44 @@ class ExpensesListActivity : AppCompatActivity() {
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+
+/*
+/**
+* References:
+* Used for onCreate() and onResume() lifecycle methods to load and refresh expenses correctly
+* when the screen starts and returns to focus:
+* Android Developers. (2019). Understand the Activity Lifecycle  |  Android Developers. Available at:
+* https://developer.android.com/guide/components/activities/activity-lifecycle.
+* [Accessed 27 Apr. 2026]
+*
+* Used for Intent navigation when opening ReceiptViewActivity and passing data (photoPath)
+* between screens:
+* Android Developers. (2019). Intents and Intent Filters  |  Android Developers. Available at:
+* https://developer.android.com/guide/components/intents-filters.
+* [Accessed 27 Apr. 2026]
+*
+* Used for loading Room database data asynchronously using coroutines (lifecycleScope):
+* David (2021). Using coroutines with Android Room database. Stack Overflow. Available at:
+* https://stackoverflow.com/questions/68126665/using-coroutines-with-android-room-database.
+* [Accessed 27 Apr. 2026]
+*
+* Used for loading data from Room database when the expense list changes:
+* Guendouz, M. (2018). Room, LiveData, and RecyclerView. Medium. Available at:
+* https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
+* [Accessed 26 Apr. 2026]
+*
+* Used for implementing data filtering logic:
+* Meyta Taliti (2022). Simple List with Date Range Filter - Meyta Taliti - Medium. Medium. Available at:
+* https://medium.com/@meytataliti/simple-list-with-date-range-filter-19bd71761495.
+* [Accessed 27 Apr. 2026]
+*
+* user1061793 (2012). How to add days into the date in android. Stack Overflow. Available at:
+* https://stackoverflow.com/questions/8738369/how-to-add-days-into-the-date-in-android.
+* [Accessed 27 Apr. 2026]
+*
+* Used for implementing the Material date picker for custom date range selection:
+* Android Developers. (2024). Pick a date or time | Android Developers. Available at:
+* https://developer.android.com/develop/ui/views/components/pickers.
+* [Accessed 27 Apr. 2026]
+*/
+ */

@@ -1,9 +1,9 @@
 package com.gia.poe_demo
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,16 +11,24 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.gia.poe_demo.data.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.NumberFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class BudgetGoalsActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
-    private val currencyFormat = NumberFormat.getNumberInstance(Locale("en", "ZA"))
+
+    private val currencyFormat =
+        NumberFormat.getNumberInstance(
+            Locale.Builder()
+                .setLanguage("en")
+                .setRegion("ZA")
+                .build()
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +36,59 @@ class BudgetGoalsActivity : AppCompatActivity() {
 
         db = AppDatabase.getInstance(this)
 
-        loadData()
+        setupNavigation()
         setupButton()
+        loadData()
+    }
+
+    private fun setupNavigation() {
+
+        findViewById<View>(R.id.navHome)?.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
+        findViewById<View>(R.id.navExpenses)?.setOnClickListener {
+            startActivity(Intent(this, ExpensesListActivity::class.java))
+        }
+
+        findViewById<View>(R.id.fabAddExpense)?.setOnClickListener {
+            startActivity(Intent(this, AddExpenseActivity::class.java))
+        }
+
+        findViewById<View>(R.id.navBadges)?.setOnClickListener {
+            startActivity(Intent(this, BadgesActivity::class.java))
+        }
+    }
+
+
+
+
+    private fun showSavedGoals(min: Double, max: Double) {
+
+        val etMin = findViewById<EditText>(R.id.etMinBudget)
+        val etMax = findViewById<EditText>(R.id.etMaxBudget)
+
+        // Hide inputs
+        etMin.visibility = View.GONE
+        etMax.visibility = View.GONE
+
+        // Create display text views dynamically (no XML changes needed)
+        val parent = etMin.parent as View
+
+        val tvMin = TextView(this).apply {
+            text = "Minimum: R ${currencyFormat.format(min)}"
+            textSize = 16f
+        }
+
+        val tvMax = TextView(this).apply {
+            text = "Maximum: R ${currencyFormat.format(max)}"
+            textSize = 16f
+        }
+
+        (parent as? android.view.ViewGroup)?.apply {
+            addView(tvMin, 0)
+            addView(tvMax, 1)
+        }
     }
 
     private fun loadData() {
@@ -45,28 +104,15 @@ class BudgetGoalsActivity : AppCompatActivity() {
             }.timeInMillis
 
             val expenses = withContext(Dispatchers.IO) {
-                db.expenseDao().getByPeriod(start, now).first()
+                db.expenseDao().getByPeriod(start, now).firstOrNull() ?: emptyList()
             }
 
             val total = expenses.sumOf { it.amount }
 
-            val budget = 5000.0
-            val remaining = budget - total
-
-            val percent = ((total / budget) * 100).toInt().coerceIn(0, 100)
-
-            findViewById<TextView>(R.id.tvTotalBudget).text =
-                "R ${currencyFormat.format(budget)}"
-
-            findViewById<TextView>(R.id.tvBudgetSubtitle).text =
-                "R ${currencyFormat.format(total)} spent · R ${currencyFormat.format(remaining)} left"
-
-            findViewById<ProgressBar>(R.id.progressTotalBudget).progress = percent
-
-            val groceries = total * 0.3
-            val entertainment = total * 0.2
+            val groceries = total * 0.30
+            val entertainment = total * 0.20
             val transport = total * 0.15
-            val food = total * 0.2
+            val food = total * 0.20
             val health = total * 0.15
 
             updateBar(R.id.barGroceries, groceries)
@@ -84,26 +130,50 @@ class BudgetGoalsActivity : AppCompatActivity() {
     }
 
     private fun updateBar(id: Int, value: Double) {
-        val bar = findViewById<View>(id)
-        val height = (value / 1000 * 150).toInt()
-        bar.layoutParams.height = height.coerceAtLeast(20)
+        val bar = findViewById<View>(id) ?: return
+
+        val height = (value / 1000 * 150).toInt().coerceAtLeast(20)
+
+        bar.layoutParams.height = height
         bar.requestLayout()
     }
 
     private fun updateLabel(id: Int, value: Double) {
-        findViewById<TextView>(id).text = "R${value.toInt()}"
+        findViewById<TextView>(id)?.text = "R${value.toInt()}"
     }
 
     private fun setupButton() {
-        findViewById<MaterialButton>(R.id.btnUpdateMonthlyBudget).setOnClickListener {
-            val value = findViewById<EditText>(R.id.etMonthlyBudget)
-                .text.toString().toDoubleOrNull()
 
-            if (value == null) {
-                Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show()
+        val prefs = getSharedPreferences("budget_prefs", MODE_PRIVATE)
+
+        findViewById<MaterialButton>(R.id.btnUpdateMonthlyBudget)?.setOnClickListener {
+
+            val min = findViewById<EditText>(R.id.etMinBudget)
+                ?.text.toString().toDoubleOrNull()
+
+            val max = findViewById<EditText>(R.id.etMaxBudget)
+                ?.text.toString().toDoubleOrNull()
+
+            if (min == null || max == null) {
+                Toast.makeText(this, "Enter valid amounts", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            if (min > max) {
+                Toast.makeText(this, "Minimum cannot be more than maximum", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            prefs.edit()
+                .putFloat("min_budget", min.toFloat())
+                .putFloat("max_budget", max.toFloat())
+                .apply()
+
+            Toast.makeText(this, "Goals Saved", Toast.LENGTH_SHORT).show()
+
+
+            showSavedGoals(min, max)
         }
     }
 }
