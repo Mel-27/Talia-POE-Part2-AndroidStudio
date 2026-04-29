@@ -40,7 +40,7 @@ Users can:
 - Set budget limits  
 - Monitor financial progress  
 
-To enhance engagement, the app includes gamification features such as **Honey Points 🐝** and **achievement badges 🍯**.
+To enhance engagement, the app includes gamification features such as **Honey Points ** and **achievement badges **.
 
 **Built with:**
 - Kotlin + Android Studio  
@@ -208,26 +208,27 @@ Run locally:
 
 ./gradlew test
  Demonstration Video
-
-YouTube Link: 
+```
+## YouTube Link: 
 Includes full walkthrough and explanation of all features.
 
- Database Overview
-Categories Table
-id (PK)
-name
-iconEmoji
-monthlyLimit
-createdAt
-Expenses Table
-id (PK)
-categoryId (FK)
-description
-amount
-date
-startTime
-endTime
-receiptPhotoPath
+## Database Overview
+###Categories Table
+- id (PK)
+- name
+- iconEmoji
+- monthlyLimit
+- createdAt
+### Expenses Table
+- id (PK)
+- categoryId (FK)
+- description
+- amount
+- date
+- startTime
+- endTime
+- receiptPhotoPath
+
 ## References
 Android Developers. (2024). Access data using Room DAOs.
 Available at: https://developer.android.com/training/data-storage/room/accessing-data
@@ -416,6 +417,9 @@ Available at: https://stackoverflow.com/questions/44158802/log-e-with-kotlin
 
 Independent Institute of Education (IIE). (2026). PROG7313 Programming 3C Module Manual.
 Durban: The Independent Institute of Education.
- GitHub Repository
 
- https://github.com/EMKNDW/prog7313-g1-2026-poe-group-7.git
+---
+
+## GitHub Repository
+
+https://github.com/EMKNDW/prog7313-g1-2026-poe-group-7.git
