@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -57,9 +58,11 @@ class AddExpenseActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK && result.data != null) {
             val imageUri = result.data?.data
             imageUri?.let { uri ->
-                currentPhotoPath = getRealPathFromURI(uri)
+                val file = copyImageToInternalStorage(uri)
+                currentPhotoPath = file.absolutePath
                 setPhotoPreview()
-                android.util.Log.d("AddExpense", "Photo selected from gallery: $currentPhotoPath")
+
+                android.util.Log.d("AddExpense", "Photo copied to: $currentPhotoPath")
                 Toast.makeText(this, "Receipt photo attached", Toast.LENGTH_SHORT).show()
             }
         }
@@ -237,9 +240,25 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 
+    private fun copyImageToInternalStorage(uri: Uri): File {
+        val inputStream = contentResolver.openInputStream(uri)
+        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
+
+        inputStream?.use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        return file
+    }
+
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        galleryLauncher.launch(intent)
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        galleryLauncher.launch(Intent.createChooser(intent, "Select Picture"))
     }
 
     private fun setPhotoPreview() {
@@ -384,6 +403,22 @@ class AddExpenseActivity : AppCompatActivity() {
             try {
                 db.expenseDao().insert(expense)
 
+                // Award +5 Honey Points for adding an expense
+                // Reference: GamificationManager.POINTS_ADD_EXPENSE
+                val prefs  = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+                val userId = prefs.getInt("USER_ID", -1)
+                if (userId != -1) {
+                    val existing = db.honeyPointsDao().getPointsForUser(userId)
+                    if (existing == null) {
+                        db.honeyPointsDao().upsert(HoneyPoints(userId = userId, points = 5))
+                    } else {
+                        db.honeyPointsDao().addPoints(userId, GamificationManager.POINTS_ADD_EXPENSE)
+                    }
+                    Log.d("AddExpense", "Awarded ${GamificationManager.POINTS_ADD_EXPENSE} Honey Points to userId=$userId")
+                }
+
+
+
                 android.util.Log.d("AddExpense", "Expense saved: $description - R$amount")
                 android.util.Log.d("AddExpense", "Photo attached: ${currentPhotoPath != null}")
 
@@ -397,3 +432,22 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 }
+
+/*
+
+References:
+
+GeeksforGeeks, 2022. Material Design Date Picker in Android using Kotlin.
+Available at: https://www.geeksforgeeks.org/kotlin/material-design-date-picker-in-android-using-kotlin/
+[Accessed 27 April 2026].
+
+Android Developers, 2026. Use Kotlin coroutines with lifecycle-aware components.
+Available at: https://developer.android.com/topic/libraries/architecture/coroutines
+[Accessed 27 April 2026].
+
+Android Ideas (Medium), 2018. findViewById in Kotlin.
+Available at: https://medium.com/android-ideas/findviewbyid-in-kotlin-ce4d22193c79
+[Accessed 27 April 2026].
+
+ */
+

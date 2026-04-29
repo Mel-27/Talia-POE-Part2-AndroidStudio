@@ -420,7 +420,7 @@ class ExpensesListActivity : AppCompatActivity() {
     // Bottom nav
     private fun setupBottomNav() {
         binding.navHome.setOnClickListener {
-            startActivity(Intent(this, ExpensesListActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
         binding.fabAddExpense.setOnClickListener {

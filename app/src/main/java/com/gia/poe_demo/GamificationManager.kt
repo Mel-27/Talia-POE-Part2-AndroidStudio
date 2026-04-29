@@ -7,17 +7,17 @@ package com.gia.poe_demo
  */
 object GamificationManager {
 
-//Points values
+    //Points values
     const val POINTS_ADD_EXPENSE    = 5
     const val POINTS_DAILY_BUDGET   = 10
     const val POINTS_STREAK_5_DAYS  = 20
     const val POINTS_SAVINGS_GOAL   = 25
 
-//Penalty values
+    //Penalty values
     const val PENALTY_EXCEED_BUDGET   = 10
     const val PENALTY_MISSED_LOG_DAY  = 5
 
-//Badge definitions (using Kotlin data class – Kotlin Documentation, 2026)
+    //Badge definitions (using Kotlin data class – Kotlin Documentation, 2026)
     data class Badge(
         val name: String,
         val requiredPoints: Int,

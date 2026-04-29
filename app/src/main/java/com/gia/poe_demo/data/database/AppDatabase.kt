@@ -11,7 +11,7 @@ import com.gia.poe_demo.data.dao.CategoryDao
 import com.gia.poe_demo.data.dao.UserDao
 import com.gia.poe_demo.data.entities.User
 import com.gia.poe_demo.data.entities.Expense
-import com.gia.poe_demo.data.entities.HoneyPoints
+import com.gia.poe_demo.HoneyPoints
 
 import com.gia.poe_demo.data.dao.ExpenseDao
 import com.gia.poe_demo.data.dao.ReminderDao
@@ -22,7 +22,7 @@ import com.gia.poe_demo.data.entities.Reminder
 // exportSchema = false just means we're not saving the schema to a file
 // ref: https://developer.android.com/training/data-storage/room#database
 // ref: https://developer.android.com/reference/androidx/room/Database
-@Database(entities = [User::class, Expense::class , Category::class, Reminder::class, BudgetGoal::class, HoneyPoints::class], version = 6, exportSchema = false)
+@Database(entities = [User::class, Expense::class , Category::class, Reminder::class, BudgetGoal::class, HoneyPoints::class], version = 7, exportSchema = false)
 // abstract class extending RoomDatabase so Room can generate the implementation at compile time
 // ref: https://developer.android.com/reference/androidx/room/RoomDatabase
 abstract class AppDatabase : RoomDatabase() {
