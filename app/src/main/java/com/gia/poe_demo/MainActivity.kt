@@ -47,19 +47,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadUserData() {
-        val prefs = getSharedPreferences("APP", MODE_PRIVATE)
-        val userId = prefs.getLong("USER_ID", -1L)
-        if (userId == -1L) return
+        // grabbing the logged in user info from SharedPreferences
+        // ref: https://developer.android.com/training/data-storage/shared-preferences
+        val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
+        val loggedInUsername = prefs.getString("loggedInUsername", "") ?: ""
+        val loggedInFullName = prefs.getString("loggedInFullName", "") ?: ""
+
+        // display name — use fullName if available, otherwise fall back to username
+        val displayName = if (loggedInFullName.isNotEmpty()) loggedInFullName else loggedInUsername
+        val firstName = displayName.split(" ").firstOrNull() ?: displayName
+
+        // set greeting and avatar initial from SharedPreferences immediately
+        // ref: https://developer.android.com/reference/android/view/View#findViewById(int)
+        findViewById<TextView>(R.id.tvUserName)?.text = "$firstName 🐝"
+        val initial = displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
+        findViewById<TextView>(R.id.tvAvatarInitial)?.text = initial
+
+        // also load streak from DB if needed
+        val userId = prefs.getInt("USER_ID", -1)
+        if (userId == -1) return
 
         lifecycleScope.launch {
             val user = withContext(Dispatchers.IO) {
-                db.userDao().getAllUsers().find { it.id == userId }
+                db.userDao().getAllUsers().find { it.id == userId.toLong() }
             }
             user?.let {
-                val firstName = it.fullName.split(" ").firstOrNull() ?: it.fullName
-                findViewById<TextView>(R.id.tvUserName)?.text = "$firstName 🐝"
-                val initial = it.fullName.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
-                findViewById<TextView>(R.id.tvAvatarInitial)?.text = initial
                 findViewById<TextView>(R.id.tvStreak)?.text = "🔥${it.streak}"
             }
         }

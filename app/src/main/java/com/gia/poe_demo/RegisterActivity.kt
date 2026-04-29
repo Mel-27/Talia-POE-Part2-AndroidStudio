@@ -146,47 +146,36 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 // inserting the new user into Room DB using the User entity
+                // both password and passwordHash stored to support both login methods
                 // ref: https://developer.android.com/training/data-storage/room/defining-data
                 userDao.registerUser(User(
                     fullName = fullName,
                     email = email,
+                    username = username,
                     password = password,
-                    passwordHash = HashUtils.md5(password)
                     // hashing the password using MD5 before storing
                     // ref: https://developer.android.com/reference/java/security/MessageDigest
-
+                    passwordHash = HashUtils.md5(password)
                 ))
-
-                // In RegisterActivity.kt, after userDao.registerUser()
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val insertedUsers = userDao.getAllUsers()
-                    android.util.Log.d("RegisterDebug", "ALL USERS AFTER INSERT: $insertedUsers")
-
-                    // Verify the specific user was saved
-                    val newUser = userDao.getUserByUsername(username)
-                    android.util.Log.d("RegisterDebug", "NEW USER: $newUser")
-                    android.util.Log.d("RegisterDebug", "Stored password: ${newUser?.password}")
-                    android.util.Log.d("RegisterDebug", "Stored hash: ${newUser?.passwordHash}")
-                }
 
                 // logging all users to Logcat to verify data is saving correctly
                 // ref: https://developer.android.com/reference/android/util/Log
                 val allUsers = userDao.getAllUsers()
                 android.util.Log.d("RoomDB", "Users in database: $allUsers")
 
-                // saving registration state to SharedPreferences so the app remembers the user
+                // saving registration state and user info to SharedPreferences
                 // ref: https://developer.android.com/training/data-storage/shared-preferences
                 val prefs = getSharedPreferences("BudgetBeePrefs", MODE_PRIVATE)
                 prefs.edit()
                     .putBoolean("isRegistered", true)
                     .putString("loggedInUsername", username)
+                    .putString("loggedInFullName", fullName)
+                    .putString("loggedInEmail", email)
                     .apply()
 
                 // switching back to main thread to navigate
                 // ref: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
                 withContext(Dispatchers.Main) {
-                    // navigating to MainActivity and calling finish() so the user cant go back to register
-                    // ref: https://developer.android.com/reference/android/app/Activity#finish()
                     startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
                     finish()
                 }
@@ -208,61 +197,61 @@ References:
 
 Android Developers, 2024. Introduction to Activities.
 Available at: https://developer.android.com/guide/components/activities/intro-activities
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. The Activity Lifecycle.
 Available at: https://developer.android.com/guide/components/activities/activity-lifecycle#onCreate
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Save data in a local database using Room.
 Available at: https://developer.android.com/training/data-storage/room
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. View - findViewById.
 Available at: https://developer.android.com/reference/android/view/View#findViewById(int)
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Intents and Intent Filters.
 Available at: https://developer.android.com/guide/components/intents-filters
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Activity - finish.
 Available at: https://developer.android.com/reference/android/app/Activity#finish()
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Patterns - EMAIL_ADDRESS.
 Available at: https://developer.android.com/reference/android/util/Patterns#EMAIL_ADDRESS
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Kotlin, 2024. Regex.
 Available at: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Use Kotlin coroutines with lifecycle-aware components.
 Available at: https://developer.android.com/topic/libraries/architecture/coroutines#lifecyclescope
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Improve app performance with Kotlin coroutines.
 Available at: https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Access data using Room DAOs.
 Available at: https://developer.android.com/training/data-storage/room/accessing-data
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Define data using Room entities.
 Available at: https://developer.android.com/training/data-storage/room/defining-data
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. MessageDigest.
 Available at: https://developer.android.com/reference/java/security/MessageDigest
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Log.
 Available at: https://developer.android.com/reference/android/util/Log
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 
 Android Developers, 2024. Save key-value data with SharedPreferences.
 Available at: https://developer.android.com/training/data-storage/shared-preferences
-[Accessed 20 April 2026].
+[Accessed 27 April 2026].
 */
